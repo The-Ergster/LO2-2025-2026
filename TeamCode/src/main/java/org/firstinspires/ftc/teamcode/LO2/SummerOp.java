@@ -27,7 +27,7 @@ public class SummerOp extends OpMode {
         backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        telemetry.addLine("Initiated 1.0");
+        telemetry.addLine("Initiated Version 1.5");
         telemetry.update();
     }
 
@@ -36,21 +36,19 @@ public class SummerOp extends OpMode {
         final double MAX_TICKS_PER_SECOND = 4661;
 
 
-        if (gamepad1.left_stick_y <= 0.05 && gamepad1.right_stick_x <= 0 && gamepad1.left_stick_x <= 0) {
-            // Stop all motors
-            frontLeft.setVelocity(0);
-            backLeft.setVelocity(0);
-            frontRight.setVelocity(0);
-            backRight.setVelocity(0);
-            return;
-        }
         //math stuff for movement
         double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+//Ok so essentially the x value has to switch for a thing due to code reversing it earlier, keep this in mind when debugging.
+//        double flPower = (y + x + rx) / maxValue;
+//        double blPower = (y - x + rx) / maxValue;
+//        double frPower = (y - x - rx) / maxValue;
+//        double brPower = (y + x - rx) / maxValue;
 
-        double flPower = (y + x + rx) / maxValue;
-        double blPower = (y - x + rx) / maxValue;
+        double flPower = (y - x + rx) / maxValue;
+        double blPower = (y + x + rx) / maxValue;
         double frPower = (y - x - rx) / maxValue;
         double brPower = (y + x - rx) / maxValue;
+
 
         frontLeft.setVelocity(flPower * MAX_TICKS_PER_SECOND);
         backLeft.setVelocity(blPower * MAX_TICKS_PER_SECOND);
@@ -74,11 +72,16 @@ public class SummerOp extends OpMode {
     public void loop() {
         //Fun fact, this one line is what drives everything
         //actual code for movement
-        driveOmni(-1*gamepad1.left_stick_y, 1*gamepad1.right_stick_x, 1*gamepad1.left_stick_x);
+        double y = -gamepad1.left_stick_y; // Forward/Backward
+        double x = gamepad1.left_stick_x;  // Strafing
+        double rx = gamepad1.right_stick_x; // Rotation
 
+        driveOmni(y, rx, x);
 
+        // Telemetry for movement
+        //If you add more buttons add more telemetry so we know whats going through
+        //Debug purposes only
+        telemetry.addData("Gamepad 1", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
+        telemetry.update();
     }
 }
-
-
-
