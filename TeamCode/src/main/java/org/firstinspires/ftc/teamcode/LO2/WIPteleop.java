@@ -60,7 +60,7 @@ public class WIPteleop extends OpMode {
         backLeft.setVelocity(blPower * MAX_TICKS_PER_SECOND);
         frontRight.setVelocity(frPower * MAX_TICKS_PER_SECOND);
         backRight.setVelocity(brPower * MAX_TICKS_PER_SECOND);
-    }
+    }//code
 
     @Override
     public void start() {
