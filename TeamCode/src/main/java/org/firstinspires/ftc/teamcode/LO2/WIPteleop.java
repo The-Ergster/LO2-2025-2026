@@ -2,12 +2,15 @@ package org.firstinspires.ftc.teamcode.LO2;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @TeleOp
 public class WIPteleop extends OpMode {
     //creates motor class
-    private DcMotorEx frontLeft, frontRight, backLeft, backRight, flywheelR, flywheelL;
+    private DcMotorEx frontLeft, frontRight, backLeft, backRight;
+    private DcMotor flywheelUP, flywheelDOWN;
+
 
     @Override
     public void init() {
@@ -17,8 +20,8 @@ public class WIPteleop extends OpMode {
         backLeft = hardwareMap.get(DcMotorEx.class, "bl");
         backRight = hardwareMap.get(DcMotorEx.class, "br");
 
-        flywheelR = hardwareMap.get(DcMotorEx.class, "wr");
-        flywheelL = hardwareMap.get(DcMotorEx.class, "wl");
+        flywheelUP = hardwareMap.get(DcMotorEx.class, "wu");
+        flywheelDOWN = hardwareMap.get(DcMotorEx.class, "wd");
 
         frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         backLeft.setDirection(DcMotorEx.Direction.REVERSE);
@@ -83,11 +86,11 @@ public class WIPteleop extends OpMode {
 
 
         if (gamepad1.x) {
-            flywheelR.setPower(1);
-            flywheelL.setPower(-1);
+            flywheelUP.setPower(-1);
+            flywheelDOWN.setPower(1);
         } else {
-            flywheelR.setPower(0);
-            flywheelL.setPower(0);
+            flywheelUP.setPower(0);
+            flywheelDOWN.setPower(0);
         }
 
 
