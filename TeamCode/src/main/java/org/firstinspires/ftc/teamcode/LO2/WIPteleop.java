@@ -5,9 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @TeleOp
-public class SummerOp extends OpMode {
+public class WIPteleop extends OpMode {
     //creates motor class
-    private DcMotorEx frontLeft, frontRight, backLeft, backRight;
+    private DcMotorEx frontLeft, frontRight, backLeft, backRight, flywheelR, flywheelL;
 
     @Override
     public void init() {
@@ -16,6 +16,9 @@ public class SummerOp extends OpMode {
         frontRight = hardwareMap.get(DcMotorEx.class, "fr");
         backLeft = hardwareMap.get(DcMotorEx.class, "bl");
         backRight = hardwareMap.get(DcMotorEx.class, "br");
+
+        flywheelR = hardwareMap.get(DcMotorEx.class, "wr");
+        flywheelL = hardwareMap.get(DcMotorEx.class, "wl");
 
         frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         backLeft.setDirection(DcMotorEx.Direction.REVERSE);
@@ -27,7 +30,7 @@ public class SummerOp extends OpMode {
         backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        telemetry.addLine("Initiated Version 1.5");
+        telemetry.addLine("Initiated Version 1");
         telemetry.update();
     }
 
@@ -77,6 +80,16 @@ public class SummerOp extends OpMode {
         double rx = gamepad1.right_stick_x; // Rotation
 
         driveOmni(y, rx, x);
+
+
+        if (gamepad1.x) {
+            flywheelR.setPower(1);
+            flywheelL.setPower(-1);
+        } else {
+            flywheelR.setPower(0);
+            flywheelL.setPower(0);
+        }
+
 
         // Telemetry for movement
         //If you add more buttons add more telemetry so we know whats going through

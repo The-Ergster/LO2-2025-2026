@@ -4,10 +4,9 @@ package org.firstinspires.ftc.teamcode.LO2;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous
-public class SummerAuto extends OpMode {
+public class Auto extends OpMode {
     private DcMotorEx frontLeft;
     private DcMotorEx frontRight;
     private DcMotorEx backRight;
@@ -205,10 +204,10 @@ public class SummerAuto extends OpMode {
 
         // test autonomous routine:
 
-        move(50);
-        strafe(30);
+        move(5);
+        strafe(3);
         rotate(90);
-        move(20);
+        move(2);
         rotate(-45);
 
         telemetry.addLine("Auto complete");
