@@ -14,8 +14,8 @@ public class FlywheelShadow extends OpMode {
     @Override
     public void init() {
 
-        flywheelUP = hardwareMap.get(DcMotorEx.class, "wu");
-        flywheelDOWN = hardwareMap.get(DcMotorEx.class, "wd");
+        flywheelUP = hardwareMap.get(DcMotor.class, "wu");
+        flywheelDOWN = hardwareMap.get(DcMotor.class, "wd");
     }
 
     @Override

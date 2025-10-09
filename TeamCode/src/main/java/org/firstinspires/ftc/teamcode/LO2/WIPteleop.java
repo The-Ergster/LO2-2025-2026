@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp
 public class WIPteleop extends OpMode {
@@ -20,8 +21,8 @@ public class WIPteleop extends OpMode {
         backLeft = hardwareMap.get(DcMotorEx.class, "bl");
         backRight = hardwareMap.get(DcMotorEx.class, "br");
 
-        flywheelUP = hardwareMap.get(DcMotorEx.class, "wu");
-        flywheelDOWN = hardwareMap.get(DcMotorEx.class, "wd");
+//        flywheelUP = hardwareMap.get(DcMotorEx.class, "wu");
+//        flywheelDOWN = hardwareMap.get(DcMotorEx.class, "wd");
 
         frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         backLeft.setDirection(DcMotorEx.Direction.REVERSE);
@@ -45,15 +46,16 @@ public class WIPteleop extends OpMode {
         //math stuff for movement
         double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
 //Ok so essentially the x value has to switch for a thing due to code reversing it earlier, keep this in mind when debugging.
-//        double flPower = (y + x + rx) / maxValue;
-//        double blPower = (y - x + rx) / maxValue;
+        double flPower = (y + x + rx) / maxValue;
+        double blPower = (y - x + rx) / maxValue;
+        double frPower = (y - x - rx) / maxValue;
+        double brPower = (y + x - rx) / maxValue;
+
+//        double flPower = (y - x + rx) / maxValue;
+//        double blPower = (y + x + rx) / maxValue;
 //        double frPower = (y - x - rx) / maxValue;
 //        double brPower = (y + x - rx) / maxValue;
 
-        double flPower = (y - x + rx) / maxValue;
-        double blPower = (y + x + rx) / maxValue;
-        double frPower = (y - x - rx) / maxValue;
-        double brPower = (y + x - rx) / maxValue;
 
 
         frontLeft.setVelocity(flPower * MAX_TICKS_PER_SECOND);
@@ -85,13 +87,13 @@ public class WIPteleop extends OpMode {
         driveOmni(y, rx, x);
 
 
-        if (gamepad1.x) {
-            flywheelUP.setPower(-1);
-            flywheelDOWN.setPower(1);
-        } else {
-            flywheelUP.setPower(0);
-            flywheelDOWN.setPower(0);
-        }
+//        if (gamepad1.x) {
+//            flywheelUP.setPower(-1);
+//            flywheelDOWN.setPower(1);
+//        } else {
+//            flywheelUP.setPower(0);
+//            flywheelDOWN.setPower(0);
+//        }
 
 
         // Telemetry for movement

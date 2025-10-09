@@ -1,5 +1,4 @@
-Hello, this is a little summer project i made fixing the LO2 code from last year
-Everything probably works, anyway here is the legal jargon
+Hello, this is LO2's code base
 
 
 
