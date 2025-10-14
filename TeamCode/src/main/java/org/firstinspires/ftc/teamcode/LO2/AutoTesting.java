@@ -19,6 +19,9 @@ public class AutoTesting extends OpMode {
         backLeft = hardwareMap.get(DcMotorEx.class, "bl");
         backRight = hardwareMap.get(DcMotorEx.class, "br");
         boolean ymove = false;
+        boolean nymove = false;
+        boolean xpos = false;
+        boolean xneg = false;
 //        flywheelUP = hardwareMap.get(DcMotorEx.class, "wu");
 //        flywheelDOWN = hardwareMap.get(DcMotorEx.class, "wd");
 
@@ -48,6 +51,15 @@ public class AutoTesting extends OpMode {
         double blPower = (y) / maxValue;
         double frPower = (y) / maxValue;
         double brPower = (y) / maxValue;
+
+        double flPowerX = (x) / maxValue;
+        double blPowerX = (-x) / maxValue;
+        double frPowerX = (-x) / maxValue;
+        double brPowerX = (x) / maxValue;
+
+
+
+
 
 //        double flPower = (y - x + rx) / maxValue;
 //        double blPower = (y + x + rx) / maxValue;
@@ -79,15 +91,51 @@ public class AutoTesting extends OpMode {
 
 
         boolean ymove = false;
-        if (gamepad1.left_stick_y > 0) {
+        boolean nymove = false;
+        //X-value postive
+        boolean xpos = false;
+        //X-value negative
+        boolean xneg = false;
+
+        if (gamepad1.a) {
             ymove = true;
+        } else {
+            ymove = false;
         }
+
+        if (gamepad1.b) {
+            nymove = true;
+        } else {
+            nymove = false;
+        }
+
+        if (gamepad1.x){
+            xpos = true;
+        } else {
+            xpos = false;
+        }
+
+        if (gamepad1.y){
+            xneg = true;
+        } else {
+            xneg = false;
+        }
+
 
 
         //Fun fact, this one line is what drives everything
         //actual code for movement
         if (ymove) {
-            double y = 0.5;
+            double y = 0.2;
+            double x = 0;  // Strafing
+            double rx = 0;
+            driveOmni(y, rx, x);
+
+            telemetry.addData("Gamepad 1", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
+            telemetry.update();
+        } else if (nymove){
+            // for negative speed/going backwards on the game pad
+            double y = - 0.2;
             double x = 0;  // Strafing
             double rx = 0;
             driveOmni(y, rx, x);
@@ -101,6 +149,35 @@ public class AutoTesting extends OpMode {
             driveOmni(y, rx, x);
 
         }
+
+        //Fun fact, this does strafing
+        if(xpos){
+            double y = 0;
+            double x = 0.2;  // Strafing
+            double rx = 0;
+            driveOmni(y, rx, x);
+
+            telemetry.addData("Gamepad 1", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
+            telemetry.update();
+        } else if (xneg) {
+            double y = 0.0;
+            double x = -0.2;  // Strafing
+            double rx = 0;
+            driveOmni(y, rx, x);
+
+            telemetry.addData("Gamepad 1", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
+            telemetry.update();
+        } else {
+            double y = 0;
+            double x = 0;  // Strafing
+            double rx = 0;
+            driveOmni(y, rx, x);
+
+            telemetry.addData("Gamepad 1", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
+            telemetry.update();
+        }
+
+
 
         ; // Forward/Backward
          // Rotation
