@@ -76,6 +76,7 @@ public class WIPteleop extends OpMode {
         telemetry.update();
     }
 
+    //Make sure all variables are in scope.
     @Override
     public void loop() {
         //Fun fact, this one line is what drives everything
