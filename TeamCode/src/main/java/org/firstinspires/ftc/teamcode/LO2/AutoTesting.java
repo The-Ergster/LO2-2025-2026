@@ -35,7 +35,7 @@ public class AutoTesting extends OpMode {
         backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        telemetry.addLine("Initiated Version 1");
+        telemetry.addLine("Initiated Version 1.2");
         telemetry.update();
     }
 
@@ -126,7 +126,7 @@ public class AutoTesting extends OpMode {
         //Fun fact, this one line is what drives everything
         //actual code for movement
         if (ymove) {
-            double y = 0.2;
+            double y = 1;
             double x = 0;  // Strafing
             double rx = 0;
             driveOmni(y, rx, x);
@@ -135,7 +135,7 @@ public class AutoTesting extends OpMode {
             telemetry.update();
         } else if (nymove){
             // for negative speed/going backwards on the game pad
-            double y = - 0.2;
+            double y = - 1;
             double x = 0;  // Strafing
             double rx = 0;
             driveOmni(y, rx, x);
@@ -153,7 +153,7 @@ public class AutoTesting extends OpMode {
         //Fun fact, this does strafing
         if(xpos){
             double y = 0;
-            double x = 0.2;  // Strafing
+            double x = 1;  // Strafing
             double rx = 0;
             driveOmni(y, rx, x);
 
@@ -161,7 +161,7 @@ public class AutoTesting extends OpMode {
             telemetry.update();
         } else if (xneg) {
             double y = 0.0;
-            double x = -0.2;  // Strafing
+            double x = -1;  // Strafing
             double rx = 0;
             driveOmni(y, rx, x);
 
