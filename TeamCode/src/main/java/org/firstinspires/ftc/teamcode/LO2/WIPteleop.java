@@ -50,6 +50,23 @@ public class WIPteleop extends OpMode {
         telemetry.addLine("Initiated Version 1.2");
         telemetry.addLine("(^_^)");
         telemetry.addLine("Brad says good luck!");
+        List<String> phrases = new ArrayList<>();
+
+        // Add elements to the list
+        phrases.add("Coding: It Works");
+        phrases.add("The Universe is over.... Never mind it's still here");
+        phrases.add("The Cake Is Lie!");
+        phrases.add("; expected ");
+        phrases.add("Shaw!");
+
+
+
+        int element = 0;
+        Random random = new Random();
+        element = random.nextInt(6);
+
+
+        telemetry.addLine(phrases.get(element));
         telemetry.update();
     }
 
@@ -88,23 +105,7 @@ public class WIPteleop extends OpMode {
     public void stop() {
         telemetry.addLine("Stopped - (^_^)");
 
-        List<String> phrases = new ArrayList<>();
 
-        // Add elements to the list
-        phrases.add("Coding: It Works");
-        phrases.add("The Universe is over.... Never mind its still here");
-        phrases.add("The Cake Is Lie!");
-        phrases.add("; expected ");
-        phrases.add("Shaw!");
-
-
-
-        int element = 0;
-        Random random = new Random();
-        element = random.nextInt(6);
-
-
-        telemetry.addLine(phrases.get(element));
         telemetry.update();
 
 
@@ -130,7 +131,7 @@ public class WIPteleop extends OpMode {
         } else {
             flywheelUP.setPower(0);
             flywheelDOWN.setPower(0);
-            loaderServo.setPosition(0);
+            loaderServo.setPosition(-1);
 
         }
         double servopos = loaderServo.getPosition();
