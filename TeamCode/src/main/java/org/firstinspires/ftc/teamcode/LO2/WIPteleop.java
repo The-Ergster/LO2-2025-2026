@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 //Fun stuff
 import java.util.ArrayList;
@@ -17,9 +18,9 @@ import java.util.Random;
 public class WIPteleop extends OpMode {
     //creates motor classes
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
-    private DcMotor flywheelUP, flywheelDOWN;
+    private DcMotor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
-    private Servo loaderServo;
+    private CRServo loaderServo;
 
 
     @Override
@@ -30,10 +31,10 @@ public class WIPteleop extends OpMode {
         backLeft = hardwareMap.get(DcMotorEx.class, "bl");
         backRight = hardwareMap.get(DcMotorEx.class, "br");
 
-        flywheelUP = hardwareMap.get(DcMotorEx.class, "wu");
-        flywheelDOWN = hardwareMap.get(DcMotorEx.class, "wd");
-        //defines encoders
-        loaderServo = hardwareMap.get(Servo.class, "ls");
+        flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "wr");
+        flywheelLEFT = hardwareMap.get(DcMotorEx.class, "wl");
+//        //defines encoders
+        loaderServo = hardwareMap.get(CRServo.class, "ls");
 
 
         //configures direction
@@ -54,16 +55,23 @@ public class WIPteleop extends OpMode {
 
         // Add elements to the list
         phrases.add("Coding: It Works");
-        phrases.add("The Universe is over.... Never mind it's still here");
-        phrases.add("The Cake Is Lie!");
+        phrases.add("The Universe is gone!!.... Never mind it's still here");
+        phrases.add("The Cake Is A Lie!");
         phrases.add("; expected ");
         phrases.add("Shaw!");
+        phrases.add("200 killed in rogue servo accident");
+        phrases.add("I say potato, you say 'ERROR cannot resolve line'");
+        phrases.add("There is no Spoon");
+        phrases.add("'Thinking noises'");
+        phrases.add("Bring me a shrubbery!");
+
+
 
 
 
         int element = 0;
         Random random = new Random();
-        element = random.nextInt(6);
+        element = random.nextInt(10);
 
 
         telemetry.addLine(phrases.get(element));
@@ -125,23 +133,25 @@ public class WIPteleop extends OpMode {
 
 
         if (gamepad1.x) {
-            flywheelUP.setPower(-1);
-            flywheelDOWN.setPower(1);
-            loaderServo.setPosition(1);
+            flywheelRIGHT.setPower(-1);
+            flywheelLEFT.setPower(1);
+            loaderServo.setPower(1);
+        } else if (gamepad1.a) {
+            loaderServo.setPower(1);
         } else {
-            flywheelUP.setPower(0);
-            flywheelDOWN.setPower(0);
-            loaderServo.setPosition(-1);
+            flywheelRIGHT.setPower(0);
+            flywheelLEFT.setPower(0);
+            loaderServo.setPower(0);
 
         }
-        double servopos = loaderServo.getPosition();
+
 
 
         // Telemetry for movement
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
         telemetry.addData("Gamepad 1", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-        telemetry.addData("Loading Servo Position", servopos);
+        telemetry.addData("Power", loaderServo.getPower());
 
         telemetry.update();
     }
