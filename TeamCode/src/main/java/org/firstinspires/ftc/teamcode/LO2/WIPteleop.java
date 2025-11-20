@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.LO2;
 //Base level imports
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //Motor Import
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -135,9 +136,16 @@ public class WIPteleop extends OpMode {
         if (gamepad1.x) {
             flywheelRIGHT.setPower(-1);
             flywheelLEFT.setPower(1);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             loaderServo.setPower(1);
         } else if (gamepad1.a) {
             loaderServo.setPower(1);
+        } else if (gamepad1.b){
+            loaderServo.setPower(-1);
         } else {
             flywheelRIGHT.setPower(0);
             flywheelLEFT.setPower(0);
