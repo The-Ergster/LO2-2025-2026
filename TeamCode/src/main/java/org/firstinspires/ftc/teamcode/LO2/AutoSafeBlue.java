@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 @Autonomous
-public class AutoSafe extends OpMode {
+public class AutoSafeBlue extends OpMode {
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
     private DcMotor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
@@ -92,12 +92,20 @@ public class AutoSafe extends OpMode {
         frontLeft.setVelocity(4661);
         backLeft.setVelocity(-4661);
         frontRight.setVelocity(-4661);
-        backRight.setVelocity(4661);
+        backRight.setVelocity(0);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        frontLeft.setVelocity(0);
+        backLeft.setVelocity(0);
+        frontRight.setVelocity(0);
+        backRight.setVelocity(0);
+        flywheelRIGHT.setPower(0);
+        flywheelLEFT.setPower(0);
+        loaderServo.setPower(0);
+
 
 
     }
