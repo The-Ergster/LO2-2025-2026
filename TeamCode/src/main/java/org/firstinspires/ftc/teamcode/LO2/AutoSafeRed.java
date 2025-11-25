@@ -82,6 +82,10 @@ public class AutoSafeRed extends OpMode {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        frontLeft.setVelocity(0);
+        backLeft.setVelocity(0);
+        frontRight.setVelocity(0);
+        backRight.setVelocity(0);
         flywheelRIGHT.setPower(-1);
         flywheelLEFT.setPower(1);
         try {

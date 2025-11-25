@@ -81,11 +81,14 @@ public class AutoSafeBlue extends OpMode {
         frontRight.setVelocity(-4661);
         backRight.setVelocity(-4661);
         try {
-            Thread.sleep(200);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        frontLeft.setVelocity(0);
+        backLeft.setVelocity(0);
+        frontRight.setVelocity(0);
+        backRight.setVelocity(0);
         flywheelRIGHT.setPower(-1);
         flywheelLEFT.setPower(1);
         try {
@@ -95,7 +98,7 @@ public class AutoSafeBlue extends OpMode {
         }
         loaderServo.setPower(1);
         try {
-            Thread.sleep(3000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -105,7 +108,7 @@ public class AutoSafeBlue extends OpMode {
         frontRight.setVelocity(-4661);
         backRight.setVelocity(0);
         try {
-            Thread.sleep(500);
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
