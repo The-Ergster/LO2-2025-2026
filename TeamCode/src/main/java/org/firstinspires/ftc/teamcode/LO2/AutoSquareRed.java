@@ -118,7 +118,13 @@ public class AutoSquareRed extends OpMode {
             throw new RuntimeException(e);
         }
 
-
+        frontLeft.setVelocity(0);
+        backLeft.setVelocity(0);
+        frontRight.setVelocity(0);
+        backRight.setVelocity(0);
+        flywheelRIGHT.setPower(0);
+        flywheelLEFT.setPower(0);
+        loaderServo.setPower(0);
     }
     @Override
     public void loop() {
