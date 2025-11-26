@@ -62,7 +62,7 @@ public class AutoSquareRed extends OpMode {
 
 
 
-        int element = 0;
+        int element;
         Random random = new Random();
         element = random.nextInt(15);
 
