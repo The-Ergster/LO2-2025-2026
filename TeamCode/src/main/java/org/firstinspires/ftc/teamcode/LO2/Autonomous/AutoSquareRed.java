@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.LO2;
+package org.firstinspires.ftc.teamcode.LO2.Autonomous;
 //Base level imports
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 @Autonomous
-public class AutoSquareBlue extends OpMode {
+public class AutoSquareRed extends OpMode {
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
     private DcMotor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
@@ -125,7 +125,6 @@ public class AutoSquareBlue extends OpMode {
         flywheelRIGHT.setPower(0);
         flywheelLEFT.setPower(0);
         loaderServo.setPower(0);
-
     }
     @Override
     public void loop() {

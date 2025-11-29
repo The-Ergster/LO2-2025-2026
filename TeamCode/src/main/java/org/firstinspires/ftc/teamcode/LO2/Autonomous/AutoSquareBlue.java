@@ -1,22 +1,18 @@
-package org.firstinspires.ftc.teamcode.LO2;
+package org.firstinspires.ftc.teamcode.LO2.Autonomous;
 //Base level imports
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-//Motor Import
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-//Servo Import
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.CRServo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 @Autonomous
-public class AutoSafeBlue extends OpMode {
+public class AutoSquareBlue extends OpMode {
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
     private DcMotor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
@@ -103,15 +99,7 @@ public class AutoSafeBlue extends OpMode {
             throw new RuntimeException(e);
         }
 
-        frontLeft.setVelocity(4661);
-        backLeft.setVelocity(-4661);
-        frontRight.setVelocity(-4661);
-        backRight.setVelocity(0);
-        try {
-            Thread.sleep(600);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
         frontLeft.setVelocity(0);
         backLeft.setVelocity(0);
         frontRight.setVelocity(0);
@@ -120,7 +108,23 @@ public class AutoSafeBlue extends OpMode {
         flywheelLEFT.setPower(0);
         loaderServo.setPower(0);
 
+        frontLeft.setVelocity(-4661);
+        backLeft.setVelocity(-4661);
+        frontRight.setVelocity(-4661);
+        backRight.setVelocity(-4661);
+        try {
+            Thread.sleep(2446);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
+        frontLeft.setVelocity(0);
+        backLeft.setVelocity(0);
+        frontRight.setVelocity(0);
+        backRight.setVelocity(0);
+        flywheelRIGHT.setPower(0);
+        flywheelLEFT.setPower(0);
+        loaderServo.setPower(0);
 
     }
     @Override

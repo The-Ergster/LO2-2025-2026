@@ -1,14 +1,12 @@
 //Package importing
-package org.firstinspires.ftc.teamcode.LO2;
+package org.firstinspires.ftc.teamcode.LO2.TeleOp;
 //Base level imports
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //Motor Import
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 //Fun stuff

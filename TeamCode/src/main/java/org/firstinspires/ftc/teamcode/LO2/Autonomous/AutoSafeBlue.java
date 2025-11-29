@@ -1,18 +1,19 @@
-package org.firstinspires.ftc.teamcode.LO2;
+package org.firstinspires.ftc.teamcode.LO2.Autonomous;
 //Base level imports
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
+//Motor Import
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+//Servo Import
+import com.qualcomm.robotcore.hardware.CRServo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 @Autonomous
-public class AutoSquareRed extends OpMode {
+public class AutoSafeBlue extends OpMode {
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
     private DcMotor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
@@ -39,7 +40,7 @@ public class AutoSquareRed extends OpMode {
         backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        List<String> phrases = new ArrayList<>();
+        List<String> phrases = new ArrayList<String>();
 
         // Add elements to the list
         phrases.add("Coding: It Works");
@@ -57,10 +58,6 @@ public class AutoSquareRed extends OpMode {
         phrases.add("'wheel work'");
         phrases.add("robot-core");
         phrases.add("Auto-bots, Roll out!");
-
-
-
-
 
         int element;
         Random random = new Random();
@@ -99,25 +96,15 @@ public class AutoSquareRed extends OpMode {
             throw new RuntimeException(e);
         }
 
-
-        frontLeft.setVelocity(0);
-        backLeft.setVelocity(0);
-        frontRight.setVelocity(0);
-        backRight.setVelocity(0);
-        flywheelRIGHT.setPower(0);
-        flywheelLEFT.setPower(0);
-        loaderServo.setPower(0);
-
-        frontLeft.setVelocity(-4661);
+        frontLeft.setVelocity(4661);
         backLeft.setVelocity(-4661);
         frontRight.setVelocity(-4661);
-        backRight.setVelocity(-4661);
+        backRight.setVelocity(0);
         try {
-            Thread.sleep(2446);
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
         frontLeft.setVelocity(0);
         backLeft.setVelocity(0);
         frontRight.setVelocity(0);
@@ -125,6 +112,9 @@ public class AutoSquareRed extends OpMode {
         flywheelRIGHT.setPower(0);
         flywheelLEFT.setPower(0);
         loaderServo.setPower(0);
+
+
+
     }
     @Override
     public void loop() {
