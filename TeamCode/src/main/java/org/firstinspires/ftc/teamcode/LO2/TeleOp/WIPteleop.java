@@ -1,19 +1,16 @@
 //Package importing
-package org.firstinspires.ftc.teamcode.LO2;
+package org.firstinspires.ftc.teamcode.LO2.TeleOp;
 //Base level imports
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //Motor Import
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 //Fun stuff
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 @TeleOp
 public class WIPteleop extends OpMode {
@@ -52,7 +49,7 @@ public class WIPteleop extends OpMode {
         telemetry.addLine("Initiated Version 1.2");
         telemetry.addLine("(^_^)");
         telemetry.addLine("Brad says good luck!");
-        List<String> phrases = new ArrayList<>();
+        ArrayList<String> phrases = new ArrayList<>();
 
         // Add elements to the list
         phrases.add("Coding: It Works");
@@ -70,7 +67,7 @@ public class WIPteleop extends OpMode {
 
 
 
-        int element = 0;
+        int element;
         Random random = new Random();
         element = random.nextInt(10);
 

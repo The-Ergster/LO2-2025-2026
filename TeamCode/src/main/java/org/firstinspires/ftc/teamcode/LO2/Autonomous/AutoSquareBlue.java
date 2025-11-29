@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.LO2;
+package org.firstinspires.ftc.teamcode.LO2.Autonomous;
 //Base level imports
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -62,7 +62,7 @@ public class AutoSquareBlue extends OpMode {
 
 
 
-        int element = 0;
+        int element;
         Random random = new Random();
         element = random.nextInt(15);
 

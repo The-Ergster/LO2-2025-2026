@@ -1,14 +1,11 @@
-package org.firstinspires.ftc.teamcode.LO2;
+package org.firstinspires.ftc.teamcode.LO2.Autonomous;
 //Base level imports
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //Motor Import
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 import java.util.ArrayList;
@@ -16,7 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 @Autonomous
-public class AutoSafeBlue extends OpMode {
+public class AutoSafeRed extends OpMode {
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
     private DcMotor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
@@ -66,7 +63,7 @@ public class AutoSafeBlue extends OpMode {
 
 
 
-        int element = 0;
+        int element;
         Random random = new Random();
         element = random.nextInt(15);
 
@@ -81,7 +78,7 @@ public class AutoSafeBlue extends OpMode {
         frontRight.setVelocity(-4661);
         backRight.setVelocity(-4661);
         try {
-            Thread.sleep(100);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -98,17 +95,17 @@ public class AutoSafeBlue extends OpMode {
         }
         loaderServo.setPower(1);
         try {
-            Thread.sleep(10000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
         frontLeft.setVelocity(4661);
-        backLeft.setVelocity(-4661);
+        backLeft.setVelocity(0);
         frontRight.setVelocity(-4661);
-        backRight.setVelocity(0);
+        backRight.setVelocity(4661);
         try {
-            Thread.sleep(600);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
