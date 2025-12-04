@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.LO2.Autonomous;
+package LO2.Autonomous;
 //Base level imports
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;

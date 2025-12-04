@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.LO2.Autonomous;
+package LO2.Autonomous;
 
 
 import static android.os.SystemClock.sleep;
@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 
 @Autonomous
-public class AUTObotsRO extends OpMode {
+public class AutoBotsRO extends OpMode {
 
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
 
