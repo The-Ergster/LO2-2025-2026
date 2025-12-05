@@ -8,10 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 import com.qualcomm.robotcore.hardware.CRServo;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import codebase.Constants;
 import codebase.actions.MoveToAction;
 import codebase.actions.SequentialAction;
@@ -21,7 +17,7 @@ import codebase.movement.mecanum.MecanumDriver;
 import codebase.pathing.PinpointLocalizer;
 
 @Autonomous
-public class AutoTest extends OpMode {
+public class TestSquareBlue extends OpMode {
 
     private SequentialAction actionThread;
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
@@ -40,16 +36,6 @@ public class AutoTest extends OpMode {
         backRight = hardwareMap.get(DcMotorEx.class, "br");
         flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "wr");
         flywheelLEFT = hardwareMap.get(DcMotorEx.class, "wl");
-//        //defines encoders
-        loaderServo = hardwareMap.get(CRServo.class, "ls");
-        driver = new MecanumDriver(new Motor(frontLeft),new Motor(frontRight), new Motor(backLeft), new Motor(backRight), Constants.MECANUM_COEFFICIENT_MATRIX,-1);
-
-        localizer.init(new FieldPosition(0,0,0));
-
-        actionThread = new SequentialAction(
-                new MoveToAction(driver, localizer, new FieldPosition(5,0,0),1,1,0.1,Math.PI/180)
-        );
-        actionThread.init();
 
         frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         backLeft.setDirection(DcMotorEx.Direction.REVERSE);
@@ -60,6 +46,17 @@ public class AutoTest extends OpMode {
         frontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        loaderServo = hardwareMap.get(CRServo.class, "ls");
+
+        driver = new MecanumDriver(new Motor(frontLeft),new Motor(frontRight), new Motor(backLeft), new Motor(backRight), Constants.MECANUM_COEFFICIENT_MATRIX,-1);
+
+        localizer.init(new FieldPosition(0,0,0));
+
+        actionThread = new SequentialAction(
+                new MoveToAction(driver, localizer, new FieldPosition(5,0,0),1,1,0.1,Math.PI/180)
+        );
+        actionThread.init();
+
 
 
     }
