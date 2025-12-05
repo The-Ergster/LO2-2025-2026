@@ -21,7 +21,8 @@ public class TestSquareBlue extends OpMode {
 
     private SequentialAction actionThread;
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
-    private DcMotor flywheelRIGHT, flywheelLEFT;
+    private Motor flywheelRIGHT;
+    private Motor flywheelLEFT;
     //Creates Servo Classes
     private CRServo loaderServo;
     private MecanumDriver driver;
@@ -34,8 +35,8 @@ public class TestSquareBlue extends OpMode {
         frontRight = hardwareMap.get(DcMotorEx.class, "fr");
         backLeft = hardwareMap.get(DcMotorEx.class, "bl");
         backRight = hardwareMap.get(DcMotorEx.class, "br");
-        flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "wr");
-        flywheelLEFT = hardwareMap.get(DcMotorEx.class, "wl");
+        flywheelRIGHT = new Motor(hardwareMap.get(DcMotorEx.class, "wr"));
+        flywheelLEFT = new Motor(hardwareMap.get(DcMotorEx.class, "wl"));
 
         frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         backLeft.setDirection(DcMotorEx.Direction.REVERSE);
