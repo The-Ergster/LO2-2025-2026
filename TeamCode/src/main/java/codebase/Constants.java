@@ -9,6 +9,10 @@ public class Constants {
     public static final PIDCoefficients DIRECTION_PID_COEFFICIENTS = new PIDCoefficients(0, 0, 0);
 
     public static double ROTATION_RADIUS_IN = 9.9851;
+    public static double MAX_WHEEL_VELOCITY_INCHES_PER_SECOND = 1000;
+
+    public static double PINPOINT_X_OFFSET = 20;
+    public static double PINPOINT_Y_OFFSET = 0;
     public static final MecanumCoefficientMatrix MECANUM_COEFFICIENT_MATRIX = new MecanumCoefficientMatrix(
             new MecanumCoefficientSet(-1,1,-1,-1),ROTATION_RADIUS_IN);
     public static class MotorConstants {

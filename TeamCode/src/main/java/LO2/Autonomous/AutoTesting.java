@@ -20,7 +20,7 @@ import codebase.pathing.PinpointLocalizer;
 public class AutoTesting extends OpMode {
 
     private SequentialAction actionThread;
-    private DcMotorEx frontLeft, frontRight, backLeft, backRight;
+    private Motor frontLeft, frontRight, backLeft, backRight;
     private DcMotor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
     private CRServo loaderServo;
@@ -30,16 +30,16 @@ public class AutoTesting extends OpMode {
     @Override
     public void init() {
 
-        frontLeft = hardwareMap.get(DcMotorEx.class, "fl");
-        frontRight = hardwareMap.get(DcMotorEx.class, "fr");
-        backLeft = hardwareMap.get(DcMotorEx.class, "bl");
-        backRight = hardwareMap.get(DcMotorEx.class, "br");
+        frontLeft = new Motor(hardwareMap.get(DcMotorEx.class, "fl"));
+        frontRight = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
+        backLeft = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
+        backRight = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
         flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "wr");
         flywheelLEFT = hardwareMap.get(DcMotorEx.class, "wl");
 //        //defines encoders
         loaderServo = hardwareMap.get(CRServo.class, "ls");
 
-        driver = new MecanumDriver(new Motor(frontLeft),new Motor(frontRight), new Motor(backLeft), new Motor(backRight), Constants.MECANUM_COEFFICIENT_MATRIX,-1);
+        driver = new MecanumDriver(frontLeft,frontRight, backLeft, backRight, Constants.MECANUM_COEFFICIENT_MATRIX,-1);
 
         localizer.init(new FieldPosition(0,0,0));
 
@@ -47,18 +47,6 @@ public class AutoTesting extends OpMode {
                 new MoveToAction(driver, localizer, new FieldPosition(5,0,0),1,1,0.1,Math.PI/180)
         );
         actionThread.init();
-
-        frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
-        backLeft.setDirection(DcMotorEx.Direction.REVERSE);
-        frontRight.setDirection(DcMotorEx.Direction.FORWARD);
-        backRight.setDirection(DcMotorEx.Direction.FORWARD);
-
-        frontLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
-
     }
 
     @Override

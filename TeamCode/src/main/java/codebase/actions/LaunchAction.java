@@ -17,14 +17,13 @@ public class LaunchAction extends SequentialAction {
                         new SetMotorPowerAction(flywheelLEFT, 1)
                 ),
                 new SleepAction(500),
-                new StopServoRotationAction(loaderServo),
-                new SleepAction(500),
+                new StartServoRotationAction(loaderServo),
+                new SleepAction(6767),
                 new SimultaneousAction(
                         new SetMotorPowerAction(flywheelRIGHT,0),
                         new SetMotorPowerAction(flywheelLEFT,0),
-                        new StartServoRotationAction(loaderServo)
+                        new StopServoRotationAction(loaderServo)
                 )
-
         );
     }
     public static void setLaunchActionMotors(CRServo loaderServo,Motor flywheelRIGHT, Motor flywheelLEFT){
