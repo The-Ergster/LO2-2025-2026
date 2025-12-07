@@ -16,6 +16,7 @@ public class Constants {
     public static final MecanumCoefficientMatrix MECANUM_COEFFICIENT_MATRIX = new MecanumCoefficientMatrix(
             new MecanumCoefficientSet(-1,1,-1,1),ROTATION_RADIUS_IN);
     public static class MotorConstants {
-        public static double GOBILDA_5202_TICKS_PER_ROTATION = 384.5;
+        public static double GOBILDA_5202_2402_0003_TICKS_PER_ROTATION = 28*3.7;
+        public static double GOBILDA_5202_2402_0014_TICKS_PER_ROTATION = 28*13.7;
     }
 }

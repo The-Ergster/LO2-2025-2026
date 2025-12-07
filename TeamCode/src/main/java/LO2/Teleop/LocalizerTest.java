@@ -1,6 +1,7 @@
 package LO2.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -15,8 +16,9 @@ import codebase.movement.mecanum.MecanumDriver;
 import codebase.pathing.Localizer;
 import codebase.pathing.PinpointLocalizer;
 
+@TeleOp
 public class LocalizerTest extends OpMode {
-    private Motor frontRight,frontLeft,backRight,backLeft;
+    private Motor fl,fr,bl,br;
 
     private MecanumDriver driver;
     private Gamepad gamepad;
@@ -26,12 +28,12 @@ public class LocalizerTest extends OpMode {
 
     @Override
     public void init(){
-        this.frontRight = new Motor(hardwareMap.get(DcMotorEx.class, "fr"),1200,2.5);
-        this.frontLeft = new Motor(hardwareMap.get(DcMotorEx.class, "fl"),1200,2.5);
-        this.backRight = new Motor(hardwareMap.get(DcMotorEx.class, "br"),1200,2.5);
-        this.backLeft = new Motor(hardwareMap.get(DcMotorEx.class, "bl"),1200,2.5);
+        this.fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"),1200,2.5);
+        this.fl = new Motor(hardwareMap.get(DcMotorEx.class, "fl"),1200,2.5);
+        this.br = new Motor(hardwareMap.get(DcMotorEx.class, "br"),1200,2.5);
+        this.bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"),1200,2.5);
 
-        driver = new MecanumDriver(frontLeft,frontRight,backLeft,backRight, Constants.MECANUM_COEFFICIENT_MATRIX,Constants.MAX_WHEEL_VELOCITY_INCHES_PER_SECOND);
+        driver = new MecanumDriver(fl,fr,bl,br, Constants.MECANUM_COEFFICIENT_MATRIX,Constants.MAX_WHEEL_VELOCITY_INCHES_PER_SECOND);
         gamepad = new Gamepad(gamepad1);
 
         localizer = new PinpointLocalizer(hardwareMap.get(PinpointModule.class,"pinpoint"),

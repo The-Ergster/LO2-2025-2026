@@ -20,7 +20,7 @@ import codebase.pathing.PinpointLocalizer;
 public class AutoTesting extends OpMode {
 
     private SequentialAction actionThread;
-    private Motor frontLeft, frontRight, backLeft, backRight;
+    private Motor fl, fr, bl, br;
     private DcMotor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
     private CRServo loaderServo;
@@ -30,16 +30,16 @@ public class AutoTesting extends OpMode {
     @Override
     public void init() {
 
-        frontLeft = new Motor(hardwareMap.get(DcMotorEx.class, "fl"));
-        frontRight = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
-        backLeft = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
-        backRight = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
+        fl = new Motor(hardwareMap.get(DcMotorEx.class, "fl"));
+        fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
+        bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
+        br = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
         flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "wr");
         flywheelLEFT = hardwareMap.get(DcMotorEx.class, "wl");
 //        //defines encoders
         loaderServo = hardwareMap.get(CRServo.class, "ls");
 
-        driver = new MecanumDriver(frontLeft,frontRight, backLeft, backRight, Constants.MECANUM_COEFFICIENT_MATRIX);
+        driver = new MecanumDriver(fl,fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
 
         localizer.init(new FieldPosition(0,0,0));
 
