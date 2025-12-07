@@ -39,7 +39,7 @@ public class AutoTesting extends OpMode {
 //        //defines encoders
         loaderServo = hardwareMap.get(CRServo.class, "ls");
 
-        driver = new MecanumDriver(frontLeft,frontRight, backLeft, backRight, Constants.MECANUM_COEFFICIENT_MATRIX,-1);
+        driver = new MecanumDriver(frontLeft,frontRight, backLeft, backRight, Constants.MECANUM_COEFFICIENT_MATRIX);
 
         localizer.init(new FieldPosition(0,0,0));
 

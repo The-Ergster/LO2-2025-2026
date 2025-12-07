@@ -53,6 +53,16 @@ public class MecanumDriver {
         br.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
+    public MecanumDriver(
+            Motor fl,
+            Motor fr,
+            Motor bl,
+            Motor br,
+            MecanumCoefficientMatrix mecanumDriveCoefficients
+    ){
+        this(fl,fr,bl,br,mecanumDriveCoefficients,-1);
+    }
+
     /**
      * Sets the velocities for all motors.
      *

@@ -14,7 +14,7 @@ public class Constants {
     public static double PINPOINT_X_OFFSET = 20;
     public static double PINPOINT_Y_OFFSET = 0;
     public static final MecanumCoefficientMatrix MECANUM_COEFFICIENT_MATRIX = new MecanumCoefficientMatrix(
-            new MecanumCoefficientSet(-1,1,-1,-1),ROTATION_RADIUS_IN);
+            new MecanumCoefficientSet(-1,1,-1,1),ROTATION_RADIUS_IN);
     public static class MotorConstants {
         public static double GOBILDA_5202_TICKS_PER_ROTATION = 384.5;
     }

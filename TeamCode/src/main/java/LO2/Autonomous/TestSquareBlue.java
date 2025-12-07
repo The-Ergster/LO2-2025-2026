@@ -34,7 +34,7 @@ public class TestSquareBlue extends OpMode {
         backLeft = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
         backRight = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
 
-        driver = new MecanumDriver(frontLeft,frontRight, backLeft, backRight, Constants.MECANUM_COEFFICIENT_MATRIX,-1);
+        driver = new MecanumDriver(frontLeft,frontRight, backLeft, backRight, Constants.MECANUM_COEFFICIENT_MATRIX);
 
         localizer.init(new FieldPosition(0,0,0));
 
