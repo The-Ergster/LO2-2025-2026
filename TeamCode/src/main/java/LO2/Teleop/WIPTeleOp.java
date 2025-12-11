@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 import com.qualcomm.robotcore.hardware.CRServo;
 
+import codebase.gamepad.Gamepad;
+
 //Fun stuff
 import java.util.ArrayList;
 import java.util.Random;
@@ -18,7 +20,7 @@ public class WIPTeleOp extends OpMode {
     private DcMotor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
     private CRServo loaderServo;
-
+    private Gamepad gamepad;
 
     @Override
     public void init() {
@@ -27,6 +29,7 @@ public class WIPTeleOp extends OpMode {
         frontRight = hardwareMap.get(DcMotorEx.class, "fr");
         backLeft = hardwareMap.get(DcMotorEx.class, "bl");
         backRight = hardwareMap.get(DcMotorEx.class, "br");
+        gamepad = new Gamepad(gamepad1);
 
         flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "wr");
         flywheelLEFT = hardwareMap.get(DcMotorEx.class, "wl");
@@ -61,6 +64,7 @@ public class WIPTeleOp extends OpMode {
         phrases.add("There is no Spoon");
         phrases.add("'Thinking noises'");
         phrases.add("Bring me a shrubbery!");
+        phrases.add("Give me a second I'm thinking");
 
 
 
@@ -68,7 +72,7 @@ public class WIPTeleOp extends OpMode {
 
         int element;
         Random random = new Random();
-        element = random.nextInt(10);
+        element = random.nextInt(11);
 
 
         telemetry.addLine(phrases.get(element));
@@ -104,6 +108,37 @@ public class WIPTeleOp extends OpMode {
     public void start() {
         telemetry.addLine("Go go go!!!!! - (^_^)");
         telemetry.update();
+        gamepad.leftTrigger.onPress(() -> {
+            if (gamepad1.right_trigger>0.1){
+                frontLeft.setVelocity(-4661);
+                backLeft.setVelocity(-4661);
+                frontRight.setVelocity(-4661);
+                backRight.setVelocity(-4661);
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                frontLeft.setVelocity(0);
+                backLeft.setVelocity(0);
+                frontRight.setVelocity(0);
+                backRight.setVelocity(0);
+                flywheelRIGHT.setPower(-1);
+                flywheelLEFT.setPower(1);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                loaderServo.setPower(1);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+        });
     }
 
     @Override
@@ -119,7 +154,7 @@ public class WIPTeleOp extends OpMode {
     //Make sure all variables are in scope.
     @Override
     public void loop() {
-
+        gamepad.loop();
         //actual code for movement
         //takes value from joysticks
         double y = -gamepad1.left_stick_y; // Forward/Backward
@@ -138,16 +173,25 @@ public class WIPTeleOp extends OpMode {
                 throw new RuntimeException(e);
             }
             loaderServo.setPower(1);
+
         } else if (gamepad1.a) {
             loaderServo.setPower(1);
-        } else if (gamepad1.b){
+
+        } else if (gamepad1.b) {
             loaderServo.setPower(-1);
-        } else {
+
+        } else if (gamepad1.y) {
+            flywheelRIGHT.setPower(1);
+            flywheelLEFT.setPower(-1);
+            loaderServo.setPower(-1);
+        }
+        else {
             flywheelRIGHT.setPower(0);
             flywheelLEFT.setPower(0);
             loaderServo.setPower(0);
 
         }
+
 
 
 
