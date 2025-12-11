@@ -21,7 +21,7 @@ import codebase.hardware.Motor;
 import codebase.movement.mecanum.MecanumDriver;
 
 @TeleOp
-public class TeamTeleOp extends OpMode {
+public class TeleOpNew extends OpMode {
 
     private Gamepad gamepad;
     private MecanumDriver driver;

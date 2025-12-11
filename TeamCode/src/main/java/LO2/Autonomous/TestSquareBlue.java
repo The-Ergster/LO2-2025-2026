@@ -36,7 +36,6 @@ public class TestSquareBlue extends OpMode {
 
         driver = new MecanumDriver(fl,fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
 
-        localizer.init(new FieldPosition(0,0,0));
 
         actionThread = new SequentialAction(
                 new CustomAction(() ->{
