@@ -42,7 +42,8 @@ public class AutoTesting extends OpMode {
         driver = new MecanumDriver(fl,fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
 
         actionThread = new SequentialAction(
-                new MoveToAction(driver, localizer, new FieldPosition(5,0,0),1,1,0.1,Math.PI/180)
+                new MoveToAction(driver, localizer, new FieldPosition(6.2,0,0),0.365,1,0.1,Math.PI/180),
+                new MoveToAction(driver, localizer, new FieldPosition(-93,-19.513,-0.916), 0.365,0.5,0.1,Math.PI/180)
         );
         actionThread.init();
     }
