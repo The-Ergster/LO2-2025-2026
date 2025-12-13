@@ -64,7 +64,7 @@ public class WIPTeleOp extends OpMode {
         phrases.add("There is no Spoon");
         phrases.add("'Thinking noises'");
         phrases.add("Bring me a shrubbery!");
-        phrases.add("Give me a second I'm thinking");
+        phrases.add("Give me a second, I'm thinking");
 
 
 
