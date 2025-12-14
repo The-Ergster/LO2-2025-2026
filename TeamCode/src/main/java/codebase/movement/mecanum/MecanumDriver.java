@@ -2,8 +2,11 @@ package codebase.movement.mecanum;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 import codebase.geometry.FieldPosition;
 import codebase.geometry.MovementVector;
+import codebase.geometry.Pose;
 import codebase.hardware.Motor;
 
 /**
@@ -135,46 +138,28 @@ public class MecanumDriver {
         );
     }
 
-    /**
-     * Sets absolute power inputs relative to the field, transforming them to robot-relative powers.
-     *
-     * @param position Current field position including direction.
-     * @param powerInput MovementVector containing absolute power inputs (-1 to 1). (vertical - x, horizontal - y)
-     */
-    public void setAbsolutePower(FieldPosition position, MovementVector powerInput) {
-        double direction = position.direction;
-
-        double relativeVerticalPower = Math.cos(direction) * powerInput.getVerticalVelocity() + Math.sin(direction) * powerInput.getHorizontalVelocity();
-        double relativeHorizontalPower = Math.sin(direction) * powerInput.getVerticalVelocity() - Math.cos(direction) * powerInput.getHorizontalVelocity();
-
-        MovementVector relativePower = new MovementVector(
-                relativeVerticalPower,
-                relativeHorizontalPower,
-                powerInput.getRotationalVelocity()
-        );
-
-        this.setRelativePower(relativePower);
-    }
 
     /**
      * Sets absolute velocities relative to the field, transforming them to robot-relative velocities.
      *
-     * @param position Current field position including direction.
-     * @param velocity MovementVector containing absolute velocity inputs (inches/second or radians/second). (vertical - x, horizontal - y)
+     * @param currentPose Current field position including direction.
+     * @param vector MovementVector containing absolute velocity inputs (inches/second or radians/second). (vertical - x, horizontal - y)
      */
-    public void setAbsoluteVelocity(FieldPosition position, MovementVector velocity) {
-        double direction = position.direction;
 
-        double relativeVerticalVelocity = Math.cos(direction) * velocity.getVerticalVelocity() + Math.sin(direction) * velocity.getHorizontalVelocity();
-        double relativeHorizontalVelocity = Math.sin(direction) * velocity.getVerticalVelocity() - Math.cos(direction) * velocity.getHorizontalVelocity();
+    //Trigonometric Equations that were Derived
+    public void setVelocityFieldCentric(Pose currentPose, MovementVector vector) {
+        double theta = currentPose.getHeading(AngleUnit.RADIANS);
+        double forwardRelative = vector.getVerticalVelocity() * Math.cos(theta) + vector.getHorizontalVelocity() * Math.sin(theta);
+        double rightwardRelative = -vector.getVerticalVelocity() * Math.sin(theta) + vector.getHorizontalVelocity() * Math.cos(theta);
 
-        MovementVector relativeVelocity = new MovementVector(
-                relativeVerticalVelocity,
-                relativeHorizontalVelocity,
-                velocity.getRotationalVelocity()
+        this.setRelativeVelocity(
+                new MovementVector(
+                        forwardRelative,
+                        rightwardRelative,
+                        vector.getRotationalVelocity(),
+                        vector.getAngleUnit()
+                )
         );
-
-        this.setRelativeVelocity(relativeVelocity);
     }
 
     /**

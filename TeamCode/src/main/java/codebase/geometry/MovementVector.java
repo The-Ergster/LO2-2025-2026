@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Locale;
 import java.util.Objects;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import androidx.annotation.NonNull;
 
 public class MovementVector implements Serializable {
@@ -25,16 +27,32 @@ public class MovementVector implements Serializable {
      */
     protected double rotationalVelocity;
 
+    protected AngleUnit angleUnit;
+
     /**
      * Constructs a MovementVector with specified vertical, horizontal, and rotational components.
      * @param verticalVelocity Linear velocity (inches/second) or power (-1 to 1) for forward/backward motion.
      * @param horizontalVelocity Linear velocity (inches/second) or power (-1 to 1) for left/right motion.
      * @param rotationalVelocity Angular velocity (radians/second) or power (-1 to 1) for rotation.
      */
+    public MovementVector(double verticalVelocity, double horizontalVelocity, double rotationalVelocity, AngleUnit angleUnit) {
+        this.verticalVelocity = verticalVelocity;
+        this.horizontalVelocity = horizontalVelocity;
+        this.rotationalVelocity = rotationalVelocity;
+        this.angleUnit = angleUnit;
+    }
     public MovementVector(double verticalVelocity, double horizontalVelocity, double rotationalVelocity) {
         this.verticalVelocity = verticalVelocity;
         this.horizontalVelocity = horizontalVelocity;
         this.rotationalVelocity = rotationalVelocity;
+    }
+
+    public MovementVector(double[] v, AngleUnit angleUnit) {
+        this(v[0], v[1], v[2], angleUnit);
+    }
+
+    public MovementVector(@NonNull Vector3D v, AngleUnit angleUnit) {
+        this(v.getX(), v.getY(), v.getZ(), angleUnit);
     }
 
     /**
@@ -61,6 +79,10 @@ public class MovementVector implements Serializable {
         return rotationalVelocity;
     }
 
+    public AngleUnit getAngleUnit() {
+        return this.angleUnit;
+    }
+
     /**
      * Sets the vertical component (velocity in inches/second or power from -1 to 1).
      * @param verticalVelocity Vertical component.
@@ -81,8 +103,9 @@ public class MovementVector implements Serializable {
      * Sets the rotational component (angular velocity in radians/second or power from -1 to 1).
      * @param rotationalVelocity Rotational component.
      */
-    public void setRotationalVelocity(double rotationalVelocity) {
+    public void setRotationalVelocity(double rotationalVelocity, AngleUnit angleUnit) {
         this.rotationalVelocity = rotationalVelocity;
+        this.angleUnit = angleUnit;
     }
 
     /**
@@ -94,7 +117,8 @@ public class MovementVector implements Serializable {
         return new MovementVector(
                 this.verticalVelocity + movementVector.verticalVelocity,
                 this.horizontalVelocity + movementVector.horizontalVelocity,
-                this.rotationalVelocity + movementVector.rotationalVelocity
+                this.angleUnit.toDegrees(this.rotationalVelocity) + movementVector.angleUnit.toDegrees(movementVector.rotationalVelocity),
+                AngleUnit.DEGREES
         );
     }
 
@@ -107,7 +131,8 @@ public class MovementVector implements Serializable {
         return new MovementVector(
                 this.verticalVelocity - movementVector.verticalVelocity,
                 this.horizontalVelocity - movementVector.horizontalVelocity,
-                this.rotationalVelocity - movementVector.rotationalVelocity
+                this.angleUnit.toDegrees(this.rotationalVelocity) - movementVector.angleUnit.toDegrees(movementVector.rotationalVelocity),
+                AngleUnit.DEGREES
         );
     }
 
@@ -120,7 +145,8 @@ public class MovementVector implements Serializable {
         return new MovementVector(
                 this.verticalVelocity * magnitude,
                 this.horizontalVelocity * magnitude,
-                this.rotationalVelocity * magnitude
+                this.rotationalVelocity * magnitude,
+                this.angleUnit
         );
     }
 

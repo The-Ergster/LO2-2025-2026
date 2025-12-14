@@ -8,13 +8,17 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 import com.qualcomm.robotcore.hardware.CRServo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 import codebase.Constants;
 import codebase.actions.MoveToAction;
 import codebase.actions.SequentialAction;
 import codebase.geometry.FieldPosition;
+import codebase.geometry.Pose;
 import codebase.hardware.Motor;
 import codebase.movement.mecanum.MecanumDriver;
 import codebase.pathing.PinpointLocalizer;
+import codebase.pathing.PinpointLocalizerFC;
 
 @Autonomous
 public class AutoTesting extends OpMode {
@@ -25,7 +29,7 @@ public class AutoTesting extends OpMode {
     //Creates Servo Classes
     private CRServo loaderServo;
     private MecanumDriver driver;
-    private PinpointLocalizer localizer;
+    private PinpointLocalizerFC localizer;
 
     @Override
     public void init() {
@@ -42,8 +46,8 @@ public class AutoTesting extends OpMode {
         driver = new MecanumDriver(fl,fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
 
         actionThread = new SequentialAction(
-                new MoveToAction(driver, localizer, new FieldPosition(6.2,0,0),0.365,1,0.1,Math.PI/180),
-                new MoveToAction(driver, localizer, new FieldPosition(-93,-19.513,-0.916), 0.365,0.5,0.1,Math.PI/180)
+                new MoveToAction(driver, localizer, new Pose(0,-3,0, AngleUnit.DEGREES),0.365,1,0.1,Math.PI/180),
+                new MoveToAction(driver, localizer, new Pose(-3,-10,-0.3,AngleUnit.DEGREES), 0.365,0.5,0.1,Math.PI/180)
         );
         actionThread.init();
     }
