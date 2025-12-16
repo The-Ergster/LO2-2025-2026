@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
+import codebase.gamepad.Gamepad;
 import codebase.geometry.FieldPosition;
 import codebase.geometry.MovementVector;
 import codebase.geometry.Pose;
@@ -50,6 +51,10 @@ public class MecanumDriver {
         this.mecanumDriveCoefficients = mecanumDriveCoefficients;
         this.maxWheelVelocity = maxWheelVelocity;
 
+        fl.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         fl.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         fr.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -167,5 +172,26 @@ public class MecanumDriver {
      */
     public void stop() {
         setMotorPowers(0, 0, 0, 0);
+    }
+
+    /**
+     * Call this method in loop in tele-op to allow the gamepad to be used for driving.
+     *
+     * @param gamepad   The gamepad that controls the robot's moveTo
+     * @param powerMultiplier Power multiplier
+     */
+    public void driveOmniFC(Gamepad gamepad, double powerMultiplier){
+
+
+        MecanumCoefficientSet coefficientSet = this.mecanumDriveCoefficients.calculateCoefficientsWithPower(
+                -gamepad.leftJoystick.getY(),
+                gamepad.leftJoystick.getX(),
+                gamepad.rightJoystick.getX()
+        );
+
+        this.fl.setVelocity(coefficientSet.fl * powerMultiplier * 4661);
+        this.fr.setVelocity(coefficientSet.fr * powerMultiplier * 4661);
+        this.bl.setVelocity(coefficientSet.bl * powerMultiplier * 4661);
+        this.br.setVelocity(coefficientSet.br * powerMultiplier * 4661);
     }
 }

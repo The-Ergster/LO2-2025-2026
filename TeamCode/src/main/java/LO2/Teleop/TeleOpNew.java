@@ -63,11 +63,7 @@ public class TeleOpNew extends OpMode {
 
         //actual code for movement
         //takes value from joysticks
-        driver.setRelativePower(new MovementVector(
-                gamepad.leftJoystick.getY(),
-                gamepad.leftJoystick.getX(),
-                gamepad.rightJoystick.getX()
-        ));
+        this.driver.driveOmniFC(gamepad, 1);
         gamepad.loop();
         actionThread.loop();
 

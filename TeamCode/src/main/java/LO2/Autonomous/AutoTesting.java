@@ -11,8 +11,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import codebase.Constants;
+import codebase.actions.LaunchAction;
 import codebase.actions.MoveToAction;
 import codebase.actions.SequentialAction;
+import codebase.actions.SleepAction;
 import codebase.geometry.FieldPosition;
 import codebase.geometry.Pose;
 import codebase.hardware.Motor;
@@ -47,6 +49,8 @@ public class AutoTesting extends OpMode {
 
         actionThread = new SequentialAction(
                 new MoveToAction(driver, localizer, new Pose(0,-3,0, AngleUnit.DEGREES),0.365,1,0.1,Math.PI/180),
+                new SleepAction(1000),
+                new LaunchAction(),
                 new MoveToAction(driver, localizer, new Pose(-3,-10,-0.3,AngleUnit.DEGREES), 0.365,0.5,0.1,Math.PI/180)
         );
         actionThread.init();

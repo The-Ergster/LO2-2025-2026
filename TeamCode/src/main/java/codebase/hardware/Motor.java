@@ -42,6 +42,10 @@ public class Motor {
         return motor.getVelocity() / (ticksPerRotation / (wheelDiameter * Math.PI));
     }
 
+    public void setMode(DcMotorEx.RunMode runMode){
+        motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);;
+    }
+
     public void setPower(double power) {
         motor.setPower(power);
     }
