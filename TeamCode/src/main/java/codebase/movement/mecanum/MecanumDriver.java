@@ -173,25 +173,4 @@ public class MecanumDriver {
     public void stop() {
         setMotorPowers(0, 0, 0, 0);
     }
-
-    /**
-     * Call this method in loop in tele-op to allow the gamepad to be used for driving.
-     *
-     * @param gamepad   The gamepad that controls the robot's moveTo
-     * @param powerMultiplier Power multiplier
-     */
-    public void driveOmniFC(Gamepad gamepad, double powerMultiplier){
-
-
-        MecanumCoefficientSet coefficientSet = this.mecanumDriveCoefficients.calculateCoefficientsWithPower(
-                -gamepad.leftJoystick.getY(),
-                gamepad.leftJoystick.getX(),
-                gamepad.rightJoystick.getX()
-        );
-
-        this.fl.setVelocity(coefficientSet.fl * powerMultiplier * 4661);
-        this.fr.setVelocity(coefficientSet.fr * powerMultiplier * 4661);
-        this.bl.setVelocity(coefficientSet.bl * powerMultiplier * 4661);
-        this.br.setVelocity(coefficientSet.br * powerMultiplier * 4661);
-    }
 }
