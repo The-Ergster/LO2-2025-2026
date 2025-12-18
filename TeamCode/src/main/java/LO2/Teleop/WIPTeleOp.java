@@ -108,47 +108,12 @@ public class WIPTeleOp extends OpMode {
     public void start() {
         telemetry.addLine("Go go go!!!!! - (^_^)");
         telemetry.update();
-        gamepad.leftTrigger.onPress(() -> {
-            if (gamepad1.right_trigger>0.1){
-                frontLeft.setVelocity(-4661);
-                backLeft.setVelocity(-4661);
-                frontRight.setVelocity(-4661);
-                backRight.setVelocity(-4661);
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                frontLeft.setVelocity(0);
-                backLeft.setVelocity(0);
-                frontRight.setVelocity(0);
-                backRight.setVelocity(0);
-                flywheelRIGHT.setPower(-1);
-                flywheelLEFT.setPower(1);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                loaderServo.setPower(1);
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-        });
     }
 
     @Override
     public void stop() {
         telemetry.addLine("Stopped - (^_^)");
-
-
         telemetry.update();
-
-
     }
 
     //Make sure all variables are in scope.
@@ -189,8 +154,21 @@ public class WIPTeleOp extends OpMode {
             flywheelRIGHT.setPower(0);
             flywheelLEFT.setPower(0);
             loaderServo.setPower(0);
-
         }
+
+        gamepad.leftTrigger.onPress(() -> {
+            if (gamepad1.right_trigger>0.1){
+                frontLeft.setVelocity(-4661);
+                backLeft.setVelocity(-4661);
+                frontRight.setVelocity(-4661);
+                backRight.setVelocity(-4661);
+                try {
+                    Thread.sleep(160);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
 
 
