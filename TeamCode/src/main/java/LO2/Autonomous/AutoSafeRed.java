@@ -100,10 +100,11 @@ public class AutoSafeRed extends OpMode {
             throw new RuntimeException(e);
         }
 
+
         frontLeft.setVelocity(4661);
-        backLeft.setVelocity(0);
+        backLeft.setVelocity(-4661);
         frontRight.setVelocity(-4661);
-        backRight.setVelocity(4661);
+        backRight.setVelocity(0);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -116,9 +117,6 @@ public class AutoSafeRed extends OpMode {
         flywheelRIGHT.setPower(0);
         flywheelLEFT.setPower(0);
         loaderServo.setPower(0);
-
-
-
     }
     @Override
     public void loop() {
