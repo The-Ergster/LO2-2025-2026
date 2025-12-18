@@ -2,8 +2,6 @@
 package LO2.Teleop;
 //Base level imports
 
-import com.qualcomm.hardware.bosch.BHI260IMU;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -61,13 +59,14 @@ public class TeleOpNew extends OpMode {
         LaunchAction.setLaunchActionMotors(loaderServo, flywheelRIGHT, flywheelLEFT);
 
         //physical configuration of IMU/Control Hub
+        //universal IMU interface
         IMU.Parameters parameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
                         //logo of controlHub
                         RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
                         //USBs
                         RevHubOrientationOnRobot.UsbFacingDirection.UP));
-        //typical initialization and clearing of heading measurement
+        //typical initialization using parameters and clearing of heading measurement
         imu.initialize(parameters);
         imu.resetYaw();
 
@@ -78,6 +77,8 @@ public class TeleOpNew extends OpMode {
     //Make sure all variables are in scope.
     @Override
     public void loop() {
+        gamepad.loop();
+
         //updating heading and pose using setHeading constructor, specifically calls for heading (yaw)
         currentPose.setHeading(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS), AngleUnit.RADIANS);
 
@@ -104,8 +105,6 @@ public class TeleOpNew extends OpMode {
         }
         actionThread.loop();
 
-        gamepad.loop();
-
         // Telemetry for movement
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
@@ -113,7 +112,11 @@ public class TeleOpNew extends OpMode {
                 gamepad.leftJoystick.getY(),
                 gamepad.leftJoystick.getX(),
                 gamepad.rightJoystick.getX());
-        telemetry.addData("Pose:", currentPose);
+        telemetry.addData("Pose (in,in,deg)", "x: %.2f | y: %.2f | heading: %.1f",
+                currentPose.getX(),
+                currentPose.getY(),
+                currentPose.getHeading(AngleUnit.DEGREES)
+        );
         telemetry.update();
     }
 }

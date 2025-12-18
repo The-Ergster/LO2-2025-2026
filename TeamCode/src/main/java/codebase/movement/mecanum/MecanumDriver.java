@@ -69,6 +69,15 @@ public class MecanumDriver {
             MecanumCoefficientMatrix mecanumDriveCoefficients
     ){
         this(fl,fr,bl,br,mecanumDriveCoefficients,-1);
+
+        fl.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        fr.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        bl.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        fl.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
     /**

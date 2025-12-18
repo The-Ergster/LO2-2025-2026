@@ -66,10 +66,22 @@ public class PinpointLocalizerFC implements LocalizerFC<Pose> {
         return ConversionsFC.convertFieldToStandard(new Pose(pinpointModule.getPosition()));
     }
 
+    @Override
+    public void init(Pose initialPose) {
+        setFieldCentric(initialPose);
+
+        try{
+            pinpointModule.update();
+        }catch (LynxNackException ignored){
+
+        }
+    }
+
 
     public Pose getVelocity() {
-        Pose2D pinpointVelocity = pinpointModule.getVelocity();
-        return ConversionsFC.convertFieldToStandard(new Pose(pinpointModule.getVelocity()));
+        return ConversionsFC.convertFieldToStandard(
+                new Pose(pinpointModule.getVelocity())
+        );
     }
 
     public String status() {

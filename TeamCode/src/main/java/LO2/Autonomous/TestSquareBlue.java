@@ -7,16 +7,22 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 import com.qualcomm.robotcore.hardware.CRServo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 import codebase.Constants;
 import codebase.actions.LaunchAction;
+import codebase.actions.MoveToAction;
 import codebase.actions.SequentialAction;
 import codebase.actions.CustomAction;
 import codebase.actions.SleepAction;
 import codebase.geometry.FieldPosition;
 import codebase.geometry.MovementVector;
+import codebase.geometry.Pose;
 import codebase.hardware.Motor;
+import codebase.hardware.PinpointModule;
 import codebase.movement.mecanum.MecanumDriver;
 import codebase.pathing.PinpointLocalizer;
+import codebase.pathing.PinpointLocalizerFC;
 
 @Autonomous
 public class TestSquareBlue extends OpMode {
@@ -24,7 +30,10 @@ public class TestSquareBlue extends OpMode {
     private SequentialAction actionThread;
     private Motor fl, fr, bl, br;
     private MecanumDriver driver;
-    private PinpointLocalizer localizer;
+    private PinpointLocalizerFC localizer;
+    private PinpointModule pinpoint;
+    private Motor flywheelRIGHT,flywheelLEFT;
+    private CRServo loaderServo;
 
     @Override
     public void init() {
@@ -33,36 +42,34 @@ public class TestSquareBlue extends OpMode {
         fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
         bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
         br = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
-
-        driver = new MecanumDriver(fl,fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
+        flywheelRIGHT = new Motor(hardwareMap.get(DcMotorEx.class, "wr"));
+        flywheelLEFT = new Motor(hardwareMap.get(DcMotorEx.class, "wl"));
+//        //defines encoders
+        loaderServo = hardwareMap.get(CRServo.class, "ls");
+        pinpoint = hardwareMap.get(PinpointModule.class, "pinpoint");
+        driver = new MecanumDriver(fl, fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
+        localizer = new PinpointLocalizerFC(pinpoint,
+                5, PinpointModule.EncoderDirection.FORWARD,
+                5, PinpointModule.EncoderDirection.FORWARD,
+                PinpointModule.GoBildaOdometryPods.goBILDA_SWINGARM_POD
+        );
 
 
         actionThread = new SequentialAction(
-                new CustomAction(() ->{
-                    driver.setRelativePower(new MovementVector(-0.5,0,0));
-                }),
-                new SleepAction(1050),
-                new CustomAction(()->{
-                    driver.stop();
-                }),
+                new MoveToAction(driver, localizer, new Pose(0, 3, 0, AngleUnit.DEGREES), 0.365, 1, 0.1, Math.PI / 180),
+                new SleepAction(1000),
                 new LaunchAction(),
-                new CustomAction(() ->{
-                    driver.setRelativePower(new MovementVector(-0.5,0,3));
-                }),
-                new SleepAction(600),
-                new CustomAction(()->{
-                    driver.stop();
-                })
+                new MoveToAction(driver, localizer, new Pose(-3, -10, -0.3, AngleUnit.DEGREES), 0.365, 0.5, 0.1, Math.PI / 180)
         );
+        localizer.init(new Pose(0,0,0, AngleUnit.RADIANS));
         actionThread.init();
-
-
-
     }
 
     @Override
     public void loop() {
+        if (localizer.isDoneInitializing()) {
+            localizer.loop();
+        }
         actionThread.loop();
-        localizer.loop();
     }
 }
