@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import codebase.gamepad.Gamepad;
 
@@ -21,6 +22,8 @@ public class WIPTeleOp extends OpMode {
     //Creates Servo Classes
     private CRServo loaderServo;
     private Gamepad gamepad;
+    private boolean rbPressedLast;
+    private boolean rbPressedNow;
 
     @Override
     public void init() {
@@ -35,6 +38,8 @@ public class WIPTeleOp extends OpMode {
         flywheelLEFT = hardwareMap.get(DcMotorEx.class, "wl");
 //        //defines encoders
         loaderServo = hardwareMap.get(CRServo.class, "ls");
+
+        rbPressedLast = false;
 
 
         //configures direction
@@ -120,6 +125,8 @@ public class WIPTeleOp extends OpMode {
     @Override
     public void loop() {
         gamepad.loop();
+        rbPressedNow =  gamepad1.right_bumper;
+
         //actual code for movement
         //takes value from joysticks
         double y = -gamepad1.left_stick_y; // Forward/Backward
@@ -156,26 +163,18 @@ public class WIPTeleOp extends OpMode {
             loaderServo.setPower(0);
         }
 
-//        if(gamepad1.right_trigger>0.9){
-//                frontLeft.setVelocity(-4661);
-//                backLeft.setVelocity(-4661);
-//                frontRight.setVelocity(-4661);
-//                backRight.setVelocity(-4661);
-//                try {
-//                    Thread.sleep(160);
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//                frontLeft.setVelocity(0);
-//                backLeft.setVelocity(0);
-//                frontRight.setVelocity(0);
-//                backRight.setVelocity(0);
-//
-//
-//        };
-
-
-
+        if (rbPressedNow && !rbPressedLast){
+            frontLeft.setVelocity(-4661);
+            backLeft.setVelocity(-4661);
+            frontRight.setVelocity(-4661);
+            backRight.setVelocity(-4661);
+            try {
+                Thread.sleep(159);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        rbPressedLast = rbPressedNow;
 
         // Telemetry for movement
         //If you add more buttons add more telemetry so we know whats going through
