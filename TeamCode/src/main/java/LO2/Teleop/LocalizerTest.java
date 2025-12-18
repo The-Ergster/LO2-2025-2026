@@ -28,21 +28,20 @@ public class LocalizerTest extends OpMode {
 
     @Override
     public void init(){
-        this.fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"),1200,2.5);
-        this.fl = new Motor(hardwareMap.get(DcMotorEx.class, "fl"),1200,2.5);
-        this.br = new Motor(hardwareMap.get(DcMotorEx.class, "br"),1200,2.5);
-        this.bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"),1200,2.5);
+        this.fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
+        this.fl = new Motor(hardwareMap.get(DcMotorEx.class, "fl"));
+        this.br = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
+        this.bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
 
         driver = new MecanumDriver(fl,fr,bl,br, Constants.MECANUM_COEFFICIENT_MATRIX,Constants.MAX_WHEEL_VELOCITY_INCHES_PER_SECOND);
         gamepad = new Gamepad(gamepad1);
 
         localizer = new PinpointLocalizer(hardwareMap.get(PinpointModule.class,"pinpoint"),
-                Constants.PINPOINT_X_OFFSET, PinpointModule.EncoderDirection.REVERSED,
-                Constants.PINPOINT_Y_OFFSET, PinpointModule.EncoderDirection.REVERSED,
-                PinpointModule.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-                localizer.init(new FieldPosition(0,0,0));
-
-                positionDisplay = telemetry.addData("pos:",localizer.getCurrentPosition());
+                Constants.PINPOINT_X_OFFSET, PinpointModule.EncoderDirection.FORWARD,
+                Constants.PINPOINT_Y_OFFSET, PinpointModule.EncoderDirection.FORWARD,
+                PinpointModule.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        localizer.init(new FieldPosition(0,0,0));
+        positionDisplay = telemetry.addData("pos:",localizer.getCurrentPosition());
     }
 
     @Override

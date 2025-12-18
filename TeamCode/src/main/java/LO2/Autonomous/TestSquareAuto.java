@@ -13,19 +13,15 @@ import codebase.Constants;
 import codebase.actions.LaunchAction;
 import codebase.actions.MoveToAction;
 import codebase.actions.SequentialAction;
-import codebase.actions.CustomAction;
 import codebase.actions.SleepAction;
-import codebase.geometry.FieldPosition;
-import codebase.geometry.MovementVector;
 import codebase.geometry.Pose;
 import codebase.hardware.Motor;
 import codebase.hardware.PinpointModule;
 import codebase.movement.mecanum.MecanumDriver;
-import codebase.pathing.PinpointLocalizer;
 import codebase.pathing.PinpointLocalizerFC;
 
 @Autonomous
-public class TestSquareBlue extends OpMode {
+public class TestSquareAuto extends OpMode {
 
     private SequentialAction actionThread;
     private Motor fl, fr, bl, br;
@@ -37,7 +33,6 @@ public class TestSquareBlue extends OpMode {
 
     @Override
     public void init() {
-
         fl = new Motor(hardwareMap.get(DcMotorEx.class, "fl"));
         fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
         bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
@@ -49,18 +44,20 @@ public class TestSquareBlue extends OpMode {
         pinpoint = hardwareMap.get(PinpointModule.class, "pinpoint");
         driver = new MecanumDriver(fl, fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
         localizer = new PinpointLocalizerFC(pinpoint,
-                5, PinpointModule.EncoderDirection.FORWARD,
-                5, PinpointModule.EncoderDirection.FORWARD,
+                Constants.PINPOINT_X_OFFSET, PinpointModule.EncoderDirection.FORWARD,
+                Constants.PINPOINT_Y_OFFSET, PinpointModule.EncoderDirection.FORWARD,
                 PinpointModule.GoBildaOdometryPods.goBILDA_SWINGARM_POD
         );
+        LaunchAction.setLaunchActionMotors(loaderServo, flywheelRIGHT, flywheelLEFT);
 
 
         actionThread = new SequentialAction(
-                new MoveToAction(driver, localizer, new Pose(0, 3, 0, AngleUnit.DEGREES), 0.365, 1, 0.1, Math.PI / 180),
+                new MoveToAction(driver, localizer, new Pose(0, 6.2, 0, AngleUnit.DEGREES), 0.365, 1, 0.1, Math.PI / 180),
                 new SleepAction(1000),
                 new LaunchAction(),
-                new MoveToAction(driver, localizer, new Pose(-3, -10, -0.3, AngleUnit.DEGREES), 0.365, 0.5, 0.1, Math.PI / 180)
+                new MoveToAction(driver, localizer, new Pose(-19.513, -93, -0.916, AngleUnit.DEGREES), 0.365, 0.5, 0.1, Math.PI / 180)
         );
+
         localizer.init(new Pose(0,0,0, AngleUnit.RADIANS));
         actionThread.init();
     }

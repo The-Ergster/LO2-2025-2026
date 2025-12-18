@@ -34,7 +34,6 @@ public class AutoTesting extends OpMode {
 
     @Override
     public void init() {
-
         fl = new Motor(hardwareMap.get(DcMotorEx.class, "fl"));
         fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
         bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
@@ -42,8 +41,8 @@ public class AutoTesting extends OpMode {
         pinpoint = hardwareMap.get(PinpointModule.class, "pinpoint");
         driver = new MecanumDriver(fl, fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
         localizer = new PinpointLocalizerFC(pinpoint,
-                5, PinpointModule.EncoderDirection.FORWARD,
-                5, PinpointModule.EncoderDirection.FORWARD,
+                Constants.PINPOINT_X_OFFSET, PinpointModule.EncoderDirection.FORWARD,
+                Constants.PINPOINT_Y_OFFSET, PinpointModule.EncoderDirection.FORWARD,
                 PinpointModule.GoBildaOdometryPods.goBILDA_SWINGARM_POD
         );
 
@@ -57,6 +56,7 @@ public class AutoTesting extends OpMode {
         localizer.init(new Pose(0,0,0,AngleUnit.RADIANS));
         actionThread.init();
     }
+
     @Override
     public void loop () {
         if (localizer.isDoneInitializing()) {
