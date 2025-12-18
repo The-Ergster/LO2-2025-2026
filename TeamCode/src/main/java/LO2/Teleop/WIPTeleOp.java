@@ -156,19 +156,23 @@ public class WIPTeleOp extends OpMode {
             loaderServo.setPower(0);
         }
 
-        gamepad.leftTrigger.onPress(() -> {
-            if (gamepad1.right_trigger>0.1){
-                frontLeft.setVelocity(-4661);
-                backLeft.setVelocity(-4661);
-                frontRight.setVelocity(-4661);
-                backRight.setVelocity(-4661);
-                try {
-                    Thread.sleep(160);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+//        if(gamepad1.right_trigger>0.9){
+//                frontLeft.setVelocity(-4661);
+//                backLeft.setVelocity(-4661);
+//                frontRight.setVelocity(-4661);
+//                backRight.setVelocity(-4661);
+//                try {
+//                    Thread.sleep(160);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                frontLeft.setVelocity(0);
+//                backLeft.setVelocity(0);
+//                frontRight.setVelocity(0);
+//                backRight.setVelocity(0);
+//
+//
+//        };
 
 
 
