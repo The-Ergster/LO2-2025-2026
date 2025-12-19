@@ -169,7 +169,7 @@ public class WIPTeleOp extends OpMode {
             frontRight.setVelocity(-4661);
             backRight.setVelocity(-4661);
             try {
-                Thread.sleep(159);
+                Thread.sleep(121);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

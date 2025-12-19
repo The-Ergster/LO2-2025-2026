@@ -28,11 +28,10 @@ public class LocalizerTest extends OpMode {
 
     @Override
     public void init(){
-        this.fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
-        this.fl = new Motor(hardwareMap.get(DcMotorEx.class, "fl"));
-        this.br = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
-        this.bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
-
+        fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
+        fl = new Motor(hardwareMap.get(DcMotorEx.class, "fl"));
+        br = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
+        bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
         driver = new MecanumDriver(fl,fr,bl,br, Constants.MECANUM_COEFFICIENT_MATRIX,Constants.MAX_WHEEL_VELOCITY_INCHES_PER_SECOND);
         gamepad = new Gamepad(gamepad1);
 

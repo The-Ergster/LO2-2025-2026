@@ -5,21 +5,18 @@ import static codebase.Constants.MOVEMENT_PID_COEFFICIENTS;
 
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
 import codebase.controllers.PIDController;
 import codebase.geometry.Angles;
 import codebase.geometry.FieldPosition;
 import codebase.geometry.MovementVector;
-import codebase.geometry.Pose;
 import codebase.movement.mecanum.MecanumDriver;
 import codebase.pathing.Localizer;
-import codebase.pathing.LocalizerFC;
 
 public class MoveToAction implements Action {
-    private final MecanumDriver driver;
-    private final LocalizerFC<Pose> localizerFC;
+    private static MecanumDriver driver;
+    private static Localizer localizer;
 
+    private final FieldPosition destination;
 
     /**
      * The speed to move horizontally/vertically or some combination of the two in inches/sec
@@ -34,20 +31,28 @@ public class MoveToAction implements Action {
     private final double maxDistanceError;
     private final double maxRotationalError;
 
+    private final PIDController xPID;
+    private final PIDController yPID;
+    private final PIDController directionPID;
 
-    private final Pose destinationPose;
-
-    public MoveToAction(MecanumDriver driver, LocalizerFC<Pose> localizerFC, Pose destinationPose){
-        this(driver, localizerFC, destinationPose, 1.25,1.25,30,30);
-    }
-    public MoveToAction(MecanumDriver driver, LocalizerFC<Pose> localizerFC, Pose destinationPose, double movementSpeed, double rotationalSpeed, double maxDistanceError, double maxRotationalError) {
-        this.driver = driver;
-        this.localizerFC = localizerFC;
-        this.destinationPose = destinationPose;
+    public MoveToAction(FieldPosition destination, double movementSpeed, double rotationalSpeed, double maxDistanceError, double maxRotationalError) {
+        this.destination = destination;
         this.movementSpeed = movementSpeed;
         this.rotationalSpeed = rotationalSpeed;
         this.maxDistanceError = maxDistanceError;
         this.maxRotationalError = maxRotationalError;
+
+        this.xPID = new PIDController(MOVEMENT_PID_COEFFICIENTS, () -> localizer.getCurrentPosition().x, () -> destination.x);
+        this.yPID = new PIDController(MOVEMENT_PID_COEFFICIENTS, () -> localizer.getCurrentPosition().y, () -> destination.y);
+        this.directionPID = new PIDController(
+                DIRECTION_PID_COEFFICIENTS,
+                () -> Angles.angleDifference(localizer.getCurrentPosition().direction, destination.direction)
+        );
+    }
+
+    public static void setDriverAndLocalizer(MecanumDriver driver, Localizer localizer) {
+        MoveToAction.driver = driver;
+        MoveToAction.localizer = localizer;
     }
 
     @Override
@@ -55,39 +60,34 @@ public class MoveToAction implements Action {
 
     @Override
     public void loop() {
-        Pose currentPose = this.localizerFC.getFieldCentric();
-        double dy = this.destinationPose.getY() - currentPose.getY();
-        double dx = this.destinationPose.getX() - currentPose.getX();
-        double dh = Angles.angleDifference(
-                currentPose.getHeading(AngleUnit.RADIANS),
-                this.destinationPose.getHeading(AngleUnit.RADIANS),
-                AngleUnit.RADIANS
-        );
+        double powerX = xPID.getPower();
+        double powerY = yPID.getPower();
+        double powerRotational = directionPID.getPower();
 
-        double vy = this.movementSpeed / (1 + Math.pow(0.5 * Math.E, -dy)) - (this.movementSpeed /2);
-        double vx = this.movementSpeed / (1 + Math.pow(0.5 * Math.E, -dx)) - (this.movementSpeed /2);
-        double vh = this.movementSpeed / (1 + Math.pow(0.5 * Math.E, -dh)) - (this.rotationalSpeed /2);
+        MovementVector vector = new MovementVector(
+                movementSpeed * powerX,
+                movementSpeed * powerY,
+                rotationalSpeed * powerRotational);
 
-
-
-        MovementVector vector = new MovementVector(vy, vx, vh, AngleUnit.RADIANS);
-
-        this.driver.setVelocityFieldCentric(currentPose, vector);
+        this.driver.setAbsolutePower(localizer.getCurrentPosition(), vector);
     }
 
     @Override
     public boolean isComplete() {
-        Pose fieldCentricPose = this.localizerFC.getFieldCentric();
+        double distanceError = Math.sqrt(Math.pow(localizer.getCurrentPosition().x - destination.x, 2) + Math.pow(localizer.getCurrentPosition().y - destination.y, 2));
+        double rotationalError = Angles.angleDifference(localizer.getCurrentPosition().direction, destination.direction);
 
-        boolean isDistanceComplete = fieldCentricPose.distanceTo(this.destinationPose)<this.maxDistanceError;
-        boolean isRotationComplete = Math.abs(this.destinationPose.getHeading(AngleUnit.DEGREES) - fieldCentricPose.getHeading(AngleUnit.DEGREES)) < this.maxRotationalError;
-        boolean isComplete = isDistanceComplete&&isRotationComplete;
-
-        if (isComplete) {
+        if ((distanceError <= maxDistanceError) && (rotationalError <= maxRotationalError)) {
             driver.stop();
+            return true;
         }
 
-        return isComplete;
+        return false;
     }
 
+    public void setPIDCoefficients(PIDCoefficients movementCoefficients, PIDCoefficients rotationCoefficients) {
+        this.xPID.setCoefficients(movementCoefficients);
+        this.yPID.setCoefficients(movementCoefficients);
+        this.directionPID.setCoefficients(rotationCoefficients);
+    }
 }

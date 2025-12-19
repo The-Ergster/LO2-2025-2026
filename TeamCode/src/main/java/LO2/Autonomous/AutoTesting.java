@@ -30,7 +30,7 @@ public class AutoTesting extends OpMode {
     private Motor fl, fr, bl, br;
     private MecanumDriver driver;
     private PinpointModule pinpoint;
-    private PinpointLocalizerFC localizer;
+    private PinpointLocalizer localizer;
 
     @Override
     public void init() {
@@ -40,28 +40,30 @@ public class AutoTesting extends OpMode {
         br = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
         pinpoint = hardwareMap.get(PinpointModule.class, "pinpoint");
         driver = new MecanumDriver(fl, fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
-        localizer = new PinpointLocalizerFC(pinpoint,
+        localizer = new PinpointLocalizer(pinpoint,
                 Constants.PINPOINT_X_OFFSET, PinpointModule.EncoderDirection.FORWARD,
                 Constants.PINPOINT_Y_OFFSET, PinpointModule.EncoderDirection.FORWARD,
                 PinpointModule.GoBildaOdometryPods.goBILDA_SWINGARM_POD
         );
 
         actionThread = new SequentialAction(
-                new MoveToAction(driver, localizer, new Pose(0, -3, 0, AngleUnit.DEGREES), 0.365, 1, 0.1, Math.PI / 180),
+                new MoveToAction(new FieldPosition(0, -3, 0), 0.365, 1, 0.1, Math.PI / 180),
                 new SleepAction(1000),
                 new LaunchAction(),
-                new MoveToAction(driver, localizer, new Pose(-3, -10, -0.3, AngleUnit.DEGREES), 0.365, 0.5, 0.1, Math.PI / 180)
+                new MoveToAction(new FieldPosition(-3, -10, -0.3), 0.365, 0.5, 0.1, Math.PI / 180)
         );
 
-        localizer.init(new Pose(0,0,0,AngleUnit.RADIANS));
+        FieldPosition startPosition;
+        startPosition = new FieldPosition(-72 + (14 + 4 * Math.sqrt(2)), 72 - (14 + 4 * Math.sqrt(2)), -Math.PI / 4);
+        startPosition.y *= -1;
+
+        localizer.init(startPosition);
         actionThread.init();
     }
 
     @Override
     public void loop () {
-        if (localizer.isDoneInitializing()) {
-            localizer.loop();
-        }
+        localizer.loop();
         actionThread.loop();
     }
 }

@@ -131,6 +131,21 @@ public class MecanumDriver {
         );
     }
 
+    public void setAbsolutePower(FieldPosition position, MovementVector powerInput) {
+        double direction = position.direction;
+
+        double relativeVerticalPower = Math.cos(direction) * powerInput.getVerticalVelocity() + Math.sin(direction) * powerInput.getHorizontalVelocity();
+        double relativeHorizontalPower = Math.sin(direction) * powerInput.getVerticalVelocity() - Math.cos(direction) * powerInput.getHorizontalVelocity();
+
+        MovementVector relativePower = new MovementVector(
+                relativeVerticalPower,
+                relativeHorizontalPower,
+                powerInput.getRotationalVelocity()
+        );
+
+        this.setRelativePower(relativePower);
+    }
+
     /**
      * Sets relative velocities for the drive system.
      * Normalizes the velocities to ensure they do not exceed the maximum wheel velocity.
