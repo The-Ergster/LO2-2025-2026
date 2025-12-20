@@ -7,20 +7,16 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 import com.qualcomm.robotcore.hardware.CRServo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
 import codebase.Constants;
 import codebase.actions.LaunchAction;
 import codebase.actions.MoveToAction;
 import codebase.actions.SequentialAction;
 import codebase.actions.SleepAction;
 import codebase.geometry.FieldPosition;
-import codebase.geometry.Pose;
 import codebase.hardware.Motor;
 import codebase.hardware.PinpointModule;
 import codebase.movement.mecanum.MecanumDriver;
 import codebase.pathing.PinpointLocalizer;
-import codebase.pathing.PinpointLocalizerFC;
 
 @Autonomous
 public class TestSquareAuto extends OpMode {
