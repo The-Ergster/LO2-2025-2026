@@ -50,6 +50,7 @@ public class TestSquareAuto extends OpMode {
 
         FieldPosition startPosition;
         startPosition = new FieldPosition(-72 + (14 + 4 * Math.sqrt(2)), 72 - (14 + 4 * Math.sqrt(2)), -Math.PI / 4);
+        //blue
         startPosition.y *= -1;
 
 

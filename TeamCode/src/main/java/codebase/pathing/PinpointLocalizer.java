@@ -57,6 +57,13 @@ public class PinpointLocalizer implements Localizer {
         pinpointModule.setPosition(new Pose2D(DistanceUnit.INCH, position.x, position.y, AngleUnit.RADIANS, position.direction));
     }
 
+    public double getXOffset(PinpointModule pinpointModule){
+        return pinpointModule.getXOffset();
+    }
+    public double getYOffset(PinpointModule pinpointModule){
+        return pinpointModule.getYOffset();
+    }
+
     @Override
     public FieldPosition getCurrentPosition() {
         Pose2D pinpointPosition = pinpointModule.getPosition();

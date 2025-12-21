@@ -20,7 +20,9 @@ import codebase.gamepad.Gamepad;
 import codebase.geometry.FieldPosition;
 import codebase.geometry.MovementVector;
 import codebase.hardware.Motor;
+import codebase.hardware.PinpointModule;
 import codebase.movement.mecanum.MecanumDriver;
+import codebase.pathing.PinpointLocalizer;
 
 @TeleOp
 public class TeleOpNew extends OpMode {
@@ -32,8 +34,9 @@ public class TeleOpNew extends OpMode {
     private Motor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
     private CRServo loaderServo;
-    private IMU imu;
     private FieldPosition currentPosition;
+    private PinpointModule pinpoint;
+    private PinpointLocalizer localizer;
 
     @Override
     public void init() {
@@ -46,7 +49,12 @@ public class TeleOpNew extends OpMode {
         flywheelLEFT = new Motor(hardwareMap.get(DcMotorEx.class, "wl"));
         //defines servo and IMU
         loaderServo = hardwareMap.get(CRServo.class, "ls");
-        imu = hardwareMap.get(IMU.class, "imu");
+        pinpoint = hardwareMap.get(PinpointModule.class,"pinpoint");
+        localizer = new PinpointLocalizer(pinpoint,
+                Constants.PINPOINT_X_OFFSET, PinpointModule.EncoderDirection.FORWARD,
+                Constants.PINPOINT_Y_OFFSET, PinpointModule.EncoderDirection.FORWARD,
+                PinpointModule.GoBildaOdometryPods.goBILDA_SWINGARM_POD
+        );
 
         gamepad = new Gamepad(gamepad1);
         actionThread = new SimultaneousAction();
@@ -56,21 +64,6 @@ public class TeleOpNew extends OpMode {
 
         //configures launch motors
         LaunchAction.setLaunchActionMotors(loaderServo, flywheelRIGHT, flywheelLEFT);
-
-        //physical configuration of IMU/Control Hub
-        IMU.Parameters parameters = new IMU.Parameters(
-                new RevHubOrientationOnRobot(
-                        //logo of controlHub
-                        RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                        //USBs
-                        RevHubOrientationOnRobot.UsbFacingDirection.UP
-                )
-        );
-
-        //initialization using parameters
-        imu.initialize(parameters);
-        //clears heading measurement from previous OpMode
-        imu.resetYaw();
 
         //x and y are not updated nor used
         currentPosition = new FieldPosition(0, 0, 0);
@@ -85,7 +78,9 @@ public class TeleOpNew extends OpMode {
     public void loop() {
         gamepad.loop();
         //gets heading from IMU
-        currentPosition.setDirection(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+        currentPosition.setDirection(localizer.getCurrentPosition().getDirection());
+        currentPosition.setX(localizer.getCurrentPosition().getX());
+        currentPosition.setY(localizer.getCurrentPosition().getY());
 
         //takes value from joysticks
         MovementVector vector = new MovementVector(
@@ -116,9 +111,7 @@ public class TeleOpNew extends OpMode {
         // Telemetry
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes
-        telemetry.addData("Field Heading (rad):", "heading: %.2f",
-                currentPosition.getDirection()
-        );
+        telemetry.addLine("Imagine_Working??");
         telemetry.update();
     }
 }

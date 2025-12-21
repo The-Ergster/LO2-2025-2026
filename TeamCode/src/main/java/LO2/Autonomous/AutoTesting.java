@@ -6,12 +6,16 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import codebase.Constants;
+import codebase.actions.CustomAction;
 import codebase.actions.LaunchAction;
 import codebase.actions.MoveToAction;
 import codebase.actions.SequentialAction;
 import codebase.actions.SleepAction;
 import codebase.geometry.FieldPosition;
+import codebase.geometry.MovementVector;
 import codebase.hardware.Motor;
 import codebase.hardware.PinpointModule;
 import codebase.movement.mecanum.MecanumDriver;
@@ -25,6 +29,7 @@ public class AutoTesting extends OpMode {
     private MecanumDriver driver;
     private PinpointModule pinpoint;
     private PinpointLocalizer localizer;
+    private Telemetry.Item positionDisplay;
 
     @Override
     public void init() {
@@ -41,23 +46,35 @@ public class AutoTesting extends OpMode {
         );
 
         actionThread = new SequentialAction(
-                new MoveToAction(new FieldPosition(0, -3, 0), 0.365, 1, 0.1, Math.PI / 180),
-                new SleepAction(1000),
+                new CustomAction(() -> {
+                    driver.setRelativePower(new MovementVector(-0.5, 0, 0));
+                }),
+                new SleepAction(1050),
+                new CustomAction(() -> {
+                    driver.stop();
+                }),
                 new LaunchAction(),
-                new MoveToAction(new FieldPosition(-3, -10, -0.3), 0.365, 0.5, 0.1, Math.PI / 180)
+                new CustomAction(() -> {
+                    driver.setRelativePower(new MovementVector(0, -0.5, 0));
+                }),
+                new SleepAction(600),
+                new CustomAction(() -> {
+                    driver.stop();
+                })
         );
 
         FieldPosition startPosition;
-        startPosition = new FieldPosition(-72 + (14 + 4 * Math.sqrt(2)), 72 - (14 + 4 * Math.sqrt(2)), -Math.PI / 4);
-        startPosition.y *= -1;
+        startPosition = new FieldPosition(0,0,0);
 
         localizer.init(startPosition);
         actionThread.init();
+        positionDisplay = telemetry.addData("pos:",localizer.getCurrentPosition());
     }
 
     @Override
     public void loop () {
         localizer.loop();
         actionThread.loop();
+        positionDisplay.setValue(localizer.getCurrentPosition());
     }
 }
