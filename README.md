@@ -63,7 +63,6 @@ The readme.md file located in the [/TeamCode/src/main/java/org/firstinspires/ftc
 ### Enhancements
 * Add ability to upload the pipeline for Limelight3A which allows teams to version control their limelight pipelines.
 
-
 ### Bug Fixes
 
 * Fix an internal bug where if the RUN_TO_POSITION run mode was specified before a target position, recovery would require a power cycle. A side effect of this fix is that a stack trace identifying the location of the error is always produced in the log. Fixes issue [1345](https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/1345).
