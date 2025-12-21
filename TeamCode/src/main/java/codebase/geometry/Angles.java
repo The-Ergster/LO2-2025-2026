@@ -18,5 +18,15 @@ public final class Angles {
         return diff;
     }
 
+    public static double normalizeAngle(double angle) {
+        double twoPi = 2.0 * Math.PI;
+        angle = angle % twoPi;
+
+        if (angle < 0) {
+            angle += twoPi;
+        }
+        return angle;
+    }
+
     private Angles() {}
 }

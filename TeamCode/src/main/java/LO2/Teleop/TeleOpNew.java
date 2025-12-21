@@ -15,11 +15,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import codebase.Constants;
 import codebase.actions.LaunchAction;
-import codebase.actions.SetServoPowerAction;
 import codebase.actions.SimultaneousAction;
 import codebase.gamepad.Gamepad;
+import codebase.geometry.FieldPosition;
 import codebase.geometry.MovementVector;
-import codebase.geometry.Pose;
 import codebase.hardware.Motor;
 import codebase.movement.mecanum.MecanumDriver;
 
@@ -34,9 +33,7 @@ public class TeleOpNew extends OpMode {
     //Creates Servo Classes
     private CRServo loaderServo;
     private IMU imu;
-    private Pose currentPose;
-    private double MAX_TICKS_PERSEC = 4661;
-
+    private FieldPosition currentPosition;
 
     @Override
     public void init() {
@@ -45,9 +42,9 @@ public class TeleOpNew extends OpMode {
         fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
         bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
         br = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
-
         flywheelRIGHT = new Motor(hardwareMap.get(DcMotorEx.class, "wr"));
         flywheelLEFT = new Motor(hardwareMap.get(DcMotorEx.class, "wl"));
+        //defines servo and IMU
         loaderServo = hardwareMap.get(CRServo.class, "ls");
         imu = hardwareMap.get(IMU.class, "imu");
 
@@ -56,66 +53,71 @@ public class TeleOpNew extends OpMode {
 
         //configures direction
         driver = new MecanumDriver(fl, fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
+
+        //configures launch motors
         LaunchAction.setLaunchActionMotors(loaderServo, flywheelRIGHT, flywheelLEFT);
 
         //physical configuration of IMU/Control Hub
-        //universal IMU interface
         IMU.Parameters parameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
                         //logo of controlHub
                         RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
                         //USBs
-                        RevHubOrientationOnRobot.UsbFacingDirection.UP));
-        //typical initialization using parameters and clearing of heading measurement
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
+                )
+        );
+
+        //initialization using parameters
         imu.initialize(parameters);
+        //clears heading measurement from previous OpMode
         imu.resetYaw();
 
-        currentPose = new Pose(0, 0, 0, AngleUnit.RADIANS);
+        //x and y are not updated nor used
+        currentPosition = new FieldPosition(0, 0, 0);
+
+        //utils for button press
+        gamepad.xButton.onPress(() -> {
+            actionThread.add(new LaunchAction(), true, true);
+        });
     }
 
-
-    //Make sure all variables are in scope.
     @Override
     public void loop() {
         gamepad.loop();
-
-        //updating heading and pose using setHeading constructor, specifically calls for heading (yaw)
-        currentPose.setHeading(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS), AngleUnit.RADIANS);
+        //gets heading from IMU
+        currentPosition.setDirection(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
 
         //takes value from joysticks
         MovementVector vector = new MovementVector(
-                gamepad.leftJoystick.getY() * MAX_TICKS_PERSEC,
-                gamepad.leftJoystick.getX() * MAX_TICKS_PERSEC,
-                gamepad.rightJoystick.getX() * MAX_TICKS_PERSEC,
+                gamepad.leftJoystick.getY(),
+                gamepad.leftJoystick.getX(),
+                gamepad.rightJoystick.getX(),
                 AngleUnit.RADIANS
         );
 
-        //setting velocity using Mecanum class
-        driver.setVelocityFieldCentric(currentPose, vector);
+        //setting velocity using heading and joysticks
+        driver.setAbsolutePower(currentPosition, vector);
 
-        //utils
-        if (gamepad.xButton.isPressed()) {
-            actionThread.add(new LaunchAction(), true, true);
-        }
-        if (gamepad.aButton.isPressed()) {
-            actionThread.add(new SetServoPowerAction(loaderServo, 1), true, true);
-        }
-        if (gamepad.bButton.isPressed()) {
-            actionThread.add(new SetServoPowerAction(loaderServo, -1), true, true);
-        }
         actionThread.loop();
 
-        // Telemetry for movement
+        //utils for button held
+        if (gamepad.aButton.isPressed()) {
+            loaderServo.setPower(1);
+        }
+        if (gamepad.bButton.isPressed()) {
+            loaderServo.setPower(-1);
+        }
+        if (gamepad.yButton.isPressed()) {
+            flywheelRIGHT.setPower(1);
+            flywheelLEFT.setPower(-1);
+            loaderServo.setPower(-1);
+        }
+
+        // Telemetry
         //If you add more buttons add more telemetry so we know whats going through
-        //Debug purposes only
-        telemetry.addData("Gamepad:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f",
-                gamepad.leftJoystick.getY(),
-                gamepad.leftJoystick.getX(),
-                gamepad.rightJoystick.getX());
-        telemetry.addData("Pose (in,in,deg)", "x: %.2f | y: %.2f | heading: %.1f",
-                currentPose.getX(),
-                currentPose.getY(),
-                currentPose.getHeading(AngleUnit.DEGREES)
+        //Debug purposes
+        telemetry.addData("Field Heading (rad):", "heading: %.2f",
+                currentPosition.getDirection()
         );
         telemetry.update();
     }

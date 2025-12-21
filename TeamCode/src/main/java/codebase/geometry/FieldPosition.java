@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 public class FieldPosition extends Point {
 
     /**
@@ -15,6 +17,14 @@ public class FieldPosition extends Point {
     public FieldPosition(double x, double y, double direction) {
         super(x, y);
         this.direction = direction;
+    }
+
+    public void setDirection(double yaw) {
+        this.direction = yaw;
+    }
+
+    public double getDirection(){
+        return this.direction;
     }
 
     @NonNull

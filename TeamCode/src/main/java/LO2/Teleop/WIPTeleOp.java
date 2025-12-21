@@ -24,6 +24,7 @@ public class WIPTeleOp extends OpMode {
     private Gamepad gamepad;
     private boolean rbPressedLast;
     private boolean rbPressedNow;
+    private boolean isParking;
 
     @Override
     public void init() {
@@ -126,6 +127,7 @@ public class WIPTeleOp extends OpMode {
     public void loop() {
         gamepad.loop();
         rbPressedNow =  gamepad1.right_bumper;
+        isParking = gamepad1.left_bumper;
 
         //actual code for movement
         //takes value from joysticks
@@ -133,7 +135,14 @@ public class WIPTeleOp extends OpMode {
         double x = gamepad1.left_stick_x;  // Strafing
         double rx = gamepad1.right_stick_x; // Rotation
 
-        driveOmni(y, rx, x);
+        if (isParking) {
+             y = -gamepad1.left_stick_y * 0.5; // Forward/Backward
+             x = gamepad1.left_stick_x * 0.5;  // Strafing
+             rx = gamepad1.right_stick_x * 0.5; // Rotation
+            driveOmni(y,x,rx);
+        }else{
+            driveOmni(y,x,rx);
+        }
 
 
         if (gamepad1.x) {
@@ -179,8 +188,8 @@ public class WIPTeleOp extends OpMode {
         // Telemetry for movement
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
-        telemetry.addData("Gamepad 1", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-        telemetry.addData("Power", loaderServo.getPower());
+        telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
+        telemetry.addData("Servo Power:", loaderServo.getPower());
 
         telemetry.update();
     }

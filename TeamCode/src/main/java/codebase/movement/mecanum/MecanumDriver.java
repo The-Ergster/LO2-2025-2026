@@ -167,33 +167,6 @@ public class MecanumDriver {
         );
     }
 
-
-    /**
-     * Sets absolute velocities relative to the field, transforming them to robot-relative velocities.
-     *
-     * @param currentPose Current field position including direction.
-     * @param vector MovementVector containing absolute velocity inputs (inches/second or radians/second). (vertical - x, horizontal - y)
-     */
-
-    //Trigonometric Equations that were Derived
-    public void setVelocityFieldCentric(Pose currentPose, MovementVector vector) {
-        double theta = currentPose.getHeading(AngleUnit.RADIANS);
-        double forwardRelative = vector.getVerticalVelocity() * Math.cos(theta) + vector.getHorizontalVelocity() * Math.sin(theta);
-        double rightwardRelative = -vector.getVerticalVelocity() * Math.sin(theta) + vector.getHorizontalVelocity() * Math.cos(theta);
-
-        this.setRelativeVelocity(
-                new MovementVector(
-                        forwardRelative,
-                        rightwardRelative,
-                        vector.getRotationalVelocity(),
-                        vector.getAngleUnit()
-                )
-        );
-    }
-
-    /**
-     * Stops all motors by setting powers to zero.
-     */
     public void stop() {
         setMotorPowers(0, 0, 0, 0);
     }
