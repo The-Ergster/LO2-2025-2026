@@ -68,39 +68,10 @@ public class TeleOpNew extends OpMode {
         //note: x and y are not updated nor used
         currentPosition = new FieldPosition(0, 0, 0);
 
-        //utils for button press (wip)
-        gamepad.xButton.onPress(() -> {
-            actionThread.add(new LaunchAction(), true, true);
-        });
-    }
+        //utils
+        gamepad.xButton
+                .onPress(() -> actionThread.add(new LaunchAction(), true, true));
 
-    @Override
-    public void loop() {
-        gamepad.loop();
-        //gets heading from IMU
-        currentPosition.setDirection(localizer.getCurrentPosition().getDirection());
-        currentPosition.setX(localizer.getCurrentPosition().getX());
-        currentPosition.setY(localizer.getCurrentPosition().getY());
-
-        //takes value from joysticks
-        MovementVector vector = new MovementVector(
-                gamepad.leftJoystick.getY(),
-                gamepad.leftJoystick.getX(),
-                gamepad.rightJoystick.getX()
-        );
-
-        //parking toggle
-        boolean parkingToggled = gamepad.rightBumper.isToggled();
-        if (parkingToggled) {
-            vector.scalarMultiply(0.5);
-        }
-
-        //setting velocity using heading and joysticks
-        driver.setAbsolutePower(currentPosition, vector);
-
-        actionThread.loop();
-
-        //utils for button held
         gamepad.aButton
                 .whileDown(() -> loaderServo.setPower(1))
                 .onRelease(() -> loaderServo.setPower(0));
@@ -120,6 +91,31 @@ public class TeleOpNew extends OpMode {
                     flywheelRIGHT.setPower(0);
                     flywheelLEFT.setPower(0);
                 });
+    }
+
+    @Override
+    public void loop() {
+        gamepad.loop();
+        actionThread.loop();
+
+        //gets heading from IMU
+        currentPosition.setDirection(localizer.getCurrentPosition().getDirection());
+        currentPosition.setX(localizer.getCurrentPosition().getX());
+        currentPosition.setY(localizer.getCurrentPosition().getY());
+
+        //takes value from joysticks
+        MovementVector vector = new MovementVector(
+                gamepad.leftJoystick.getY(),
+                gamepad.leftJoystick.getX(),
+                gamepad.rightJoystick.getX()
+        );
+        //parking toggle
+        boolean parkingToggled = gamepad.rightBumper.isToggled();
+        if (parkingToggled) {
+            vector.scalarMultiply(0.5);
+        }
+        //setting velocity using heading and joysticks
+        driver.setAbsolutePower(currentPosition, vector);
 
         // Telemetry
         //If you add more buttons add more telemetry so we know whats going through
