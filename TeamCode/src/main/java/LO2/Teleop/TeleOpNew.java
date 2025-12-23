@@ -98,7 +98,7 @@ public class TeleOpNew extends OpMode {
         gamepad.loop();
         actionThread.loop();
 
-        //gets heading from IMU
+        //gets heading from localizer IMU
         currentPosition.setDirection(localizer.getCurrentPosition().getDirection());
         currentPosition.setX(localizer.getCurrentPosition().getX());
         currentPosition.setY(localizer.getCurrentPosition().getY());
@@ -118,8 +118,7 @@ public class TeleOpNew extends OpMode {
         driver.setAbsolutePower(currentPosition, vector);
 
         // Telemetry
-        //If you add more buttons add more telemetry so we know whats going through
-        //Debug purposes
+        //If you add more buttons add more telemetry for debug purposes
         telemetry.addLine("Imagine_Working??");
         telemetry.update();
     }
