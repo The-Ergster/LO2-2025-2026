@@ -1,35 +1,35 @@
-//Package importing
+//Package import
 package LO2.Teleop;
-//Base level imports
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+//OpMode imports
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//Motor Import
+
+//Hardware Imports
+import codebase.gamepad.Gamepad;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-//Servo Import
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
-import codebase.Constants;
+//Action Imports
 import codebase.actions.LaunchAction;
 import codebase.actions.SimultaneousAction;
-import codebase.gamepad.Gamepad;
-import codebase.geometry.FieldPosition;
-import codebase.geometry.MovementVector;
+
+//Movement Imports
 import codebase.hardware.Motor;
-import codebase.hardware.PinpointModule;
 import codebase.movement.mecanum.MecanumDriver;
+import codebase.geometry.MovementVector;
+
+//Localization Imports
+import codebase.hardware.PinpointModule;
 import codebase.pathing.PinpointLocalizer;
+import codebase.geometry.FieldPosition;
+import codebase.Constants;
 
 @TeleOp
 public class TeleOpNew extends OpMode {
     private Gamepad gamepad;
     private MecanumDriver driver;
     private SimultaneousAction actionThread;
-    //creates motor classes
     private Motor fl, fr, bl, br;
     private Motor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
@@ -40,15 +40,17 @@ public class TeleOpNew extends OpMode {
 
     @Override
     public void init() {
-        //defines motors
+        //defines motors using motor class
         fl = new Motor(hardwareMap.get(DcMotorEx.class, "fl"));
         fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
         bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
         br = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
         flywheelRIGHT = new Motor(hardwareMap.get(DcMotorEx.class, "wr"));
         flywheelLEFT = new Motor(hardwareMap.get(DcMotorEx.class, "wl"));
-        //defines servo and IMU
+
         loaderServo = hardwareMap.get(CRServo.class, "ls");
+
+        //creates localizer object using pinpoint odometry computer
         pinpoint = hardwareMap.get(PinpointModule.class,"pinpoint");
         localizer = new PinpointLocalizer(pinpoint,
                 Constants.PINPOINT_X_OFFSET, PinpointModule.EncoderDirection.FORWARD,
@@ -58,55 +60,62 @@ public class TeleOpNew extends OpMode {
 
         gamepad = new Gamepad(gamepad1);
         actionThread = new SimultaneousAction();
-
-        //configures direction
         driver = new MecanumDriver(fl, fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
 
         //configures launch motors
         LaunchAction.setLaunchActionMotors(loaderServo, flywheelRIGHT, flywheelLEFT);
 
-        //x and y are not updated nor used
+        //note: x and y are not updated nor used
         currentPosition = new FieldPosition(0, 0, 0);
 
-        //utils for button press
-        gamepad.xButton.onPress(() -> {
-            actionThread.add(new LaunchAction(), true, true);
-        });
+        //utils (wip)
+        gamepad.xButton
+                .onPress(() -> actionThread.add(new LaunchAction(), true, true));
+
+        gamepad.aButton
+                .whileDown(() -> loaderServo.setPower(1))
+                .onRelease(() -> loaderServo.setPower(0));
+
+        gamepad.bButton
+                .whileDown(() -> loaderServo.setPower(-1))
+                .onRelease(() -> loaderServo.setPower(0));
+
+        gamepad.yButton
+                .whileDown(() -> {
+                    loaderServo.setPower(-1);
+                    flywheelRIGHT.setPower(1);
+                    flywheelLEFT.setPower(-1);
+                })
+                .onRelease(() -> {
+                    loaderServo.setPower(0);
+                    flywheelRIGHT.setPower(0);
+                    flywheelLEFT.setPower(0);
+                });
+
     }
 
     @Override
     public void loop() {
         gamepad.loop();
-        //gets heading from IMU
-        currentPosition.setDirection(localizer.getCurrentPosition().getDirection());
+        actionThread.loop();
+
         currentPosition.setX(localizer.getCurrentPosition().getX());
         currentPosition.setY(localizer.getCurrentPosition().getY());
+        currentPosition.setDirection(localizer.getCurrentPosition().getDirection());
 
         //takes value from joysticks
         MovementVector vector = new MovementVector(
                 gamepad.leftJoystick.getY(),
                 gamepad.leftJoystick.getX(),
-                gamepad.rightJoystick.getX(),
-                AngleUnit.RADIANS
+                gamepad.rightJoystick.getX()
         );
-
+        //parking toggle
+        boolean parkingToggled = gamepad.rightBumper.isToggled();
+        if (parkingToggled) {
+            vector.scalarMultiply(0.5);
+        }
         //setting velocity using heading and joysticks
         driver.setAbsolutePower(currentPosition, vector);
-
-        actionThread.loop();
-
-        //utils for button held
-        if (gamepad.aButton.isPressed()) {
-            loaderServo.setPower(1);
-        }
-        if (gamepad.bButton.isPressed()) {
-            loaderServo.setPower(-1);
-        }
-        if (gamepad.yButton.isPressed()) {
-            flywheelRIGHT.setPower(1);
-            flywheelLEFT.setPower(-1);
-            loaderServo.setPower(-1);
-        }
 
         // Telemetry
         //If you add more buttons add more telemetry so we know whats going through
@@ -115,4 +124,3 @@ public class TeleOpNew extends OpMode {
         telemetry.update();
     }
 }
-
