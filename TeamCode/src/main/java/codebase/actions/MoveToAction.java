@@ -65,11 +65,11 @@ public class MoveToAction implements Action {
         double powerRotational = directionPID.getPower();
 
         MovementVector vector = new MovementVector(
-                movementSpeed * powerX,
                 movementSpeed * powerY,
+                movementSpeed * powerX,
                 rotationalSpeed * powerRotational);
 
-        this.driver.setAbsolutePower(localizer.getCurrentPosition(), vector);
+        driver.setAbsolutePower(localizer.getCurrentPosition(), vector);
     }
 
     @Override

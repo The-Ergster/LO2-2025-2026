@@ -135,7 +135,7 @@ public class MecanumDriver {
         double direction = position.direction;
 
         double relativeVerticalPower = Math.cos(direction) * powerInput.getVerticalVelocity() + Math.sin(direction) * powerInput.getHorizontalVelocity();
-        double relativeHorizontalPower = Math.sin(direction) * powerInput.getVerticalVelocity() - Math.cos(direction) * powerInput.getHorizontalVelocity();
+        double relativeHorizontalPower = -Math.sin(direction) * powerInput.getVerticalVelocity() + Math.cos(direction) * powerInput.getHorizontalVelocity();
 
         MovementVector relativePower = new MovementVector(
                 relativeVerticalPower,

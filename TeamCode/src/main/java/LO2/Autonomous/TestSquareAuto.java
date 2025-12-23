@@ -26,7 +26,7 @@ public class TestSquareAuto extends OpMode {
     private MecanumDriver driver;
     private PinpointLocalizer localizer;
     private PinpointModule pinpoint;
-    private Motor flywheelRIGHT,flywheelLEFT;
+    private Motor flyf,flyb;
     private CRServo loaderServo;
 
     @Override
@@ -35,8 +35,8 @@ public class TestSquareAuto extends OpMode {
         fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
         bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
         br = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
-        flywheelRIGHT = new Motor(hardwareMap.get(DcMotorEx.class, "wr"));
-        flywheelLEFT = new Motor(hardwareMap.get(DcMotorEx.class, "wl"));
+        flyf = new Motor(hardwareMap.get(DcMotorEx.class, "wr"));
+        flyb = new Motor(hardwareMap.get(DcMotorEx.class, "wl"));
         loaderServo = hardwareMap.get(CRServo.class, "ls");
         pinpoint = hardwareMap.get(PinpointModule.class, "pinpoint");
         driver = new MecanumDriver(fl, fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
@@ -45,7 +45,7 @@ public class TestSquareAuto extends OpMode {
                 Constants.PINPOINT_Y_OFFSET, PinpointModule.EncoderDirection.FORWARD,
                 PinpointModule.GoBildaOdometryPods.goBILDA_SWINGARM_POD
         );
-        LaunchAction.setLaunchActionMotors(loaderServo, flywheelRIGHT, flywheelLEFT);
+        LaunchAction.setLaunchActionMotors(loaderServo, flyf, flyb);
         MoveToAction.setDriverAndLocalizer(driver,localizer);
 
         FieldPosition startPosition;

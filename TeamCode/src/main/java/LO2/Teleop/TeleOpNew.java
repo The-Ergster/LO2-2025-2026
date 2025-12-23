@@ -30,9 +30,7 @@ public class TeleOpNew extends OpMode {
     private Gamepad gamepad;
     private MecanumDriver driver;
     private SimultaneousAction actionThread;
-    private Motor fl, fr, bl, br;
-    private Motor flywheelRIGHT, flywheelLEFT;
-    //Creates Servo Classes
+    private Motor fl, fr, bl, br, flyf, flyb;
     private CRServo loaderServo;
     private FieldPosition currentPosition;
     private PinpointModule pinpoint;
@@ -45,8 +43,8 @@ public class TeleOpNew extends OpMode {
         fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
         bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
         br = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
-        flywheelRIGHT = new Motor(hardwareMap.get(DcMotorEx.class, "wr"));
-        flywheelLEFT = new Motor(hardwareMap.get(DcMotorEx.class, "wl"));
+        flyf = new Motor(hardwareMap.get(DcMotorEx.class, "wr"));
+        flyb = new Motor(hardwareMap.get(DcMotorEx.class, "wl"));
 
         loaderServo = hardwareMap.get(CRServo.class, "ls");
 
@@ -63,14 +61,18 @@ public class TeleOpNew extends OpMode {
         driver = new MecanumDriver(fl, fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
 
         //configures launch motors
-        LaunchAction.setLaunchActionMotors(loaderServo, flywheelRIGHT, flywheelLEFT);
+        LaunchAction.setLaunchActionMotors(loaderServo, flyf, flyb);
 
         //note: x and y are not updated nor used
         currentPosition = new FieldPosition(0, 0, 0);
 
         //utils
-        gamepad.xButton
+        gamepad.rightTrigger
                 .onPress(() -> actionThread.add(new LaunchAction(), true, true));
+
+        gamepad.leftTrigger
+                .onPress(() -> actionThread.add(new LaunchAction(), false, false));
+                //replace with intake action.
 
         gamepad.aButton
                 .whileDown(() -> loaderServo.setPower(1))
@@ -83,13 +85,13 @@ public class TeleOpNew extends OpMode {
         gamepad.yButton
                 .whileDown(() -> {
                     loaderServo.setPower(-1);
-                    flywheelRIGHT.setPower(1);
-                    flywheelLEFT.setPower(-1);
+                    flyf.setPower(1);
+                    flyb.setPower(-1);
                 })
                 .onRelease(() -> {
                     loaderServo.setPower(0);
-                    flywheelRIGHT.setPower(0);
-                    flywheelLEFT.setPower(0);
+                    flyf.setPower(0);
+                    flyb.setPower(0);
                 });
     }
 
@@ -99,10 +101,8 @@ public class TeleOpNew extends OpMode {
         gamepad.loop();
         actionThread.loop();
 
-        //gets heading from localizer IMU
-        currentPosition.setDirection(localizer.getCurrentPosition().getDirection());
-        currentPosition.setX(localizer.getCurrentPosition().getX());
-        currentPosition.setY(localizer.getCurrentPosition().getY());
+        //get position
+        currentPosition = localizer.getCurrentPosition();
 
         //takes value from joysticks
         MovementVector vector = new MovementVector(
@@ -110,11 +110,13 @@ public class TeleOpNew extends OpMode {
                 gamepad.leftJoystick.getX(),
                 gamepad.rightJoystick.getX()
         );
+
         //parking toggle
-        boolean parkingToggled = gamepad.rightBumper.isToggled();
+        boolean parkingToggled = gamepad.xButton.isToggled();
         if (parkingToggled) {
             vector.scalarMultiply(0.5);
         }
+
         //setting velocity using heading and joysticks
         driver.setAbsolutePower(currentPosition, vector);
 
