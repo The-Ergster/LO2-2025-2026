@@ -95,6 +95,7 @@ public class TeleOpNew extends OpMode {
 
     @Override
     public void loop() {
+        localizer.loop();
         gamepad.loop();
         actionThread.loop();
 
