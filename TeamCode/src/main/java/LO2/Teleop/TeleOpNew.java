@@ -122,7 +122,13 @@ public class TeleOpNew extends OpMode {
 
         // Telemetry
         //If you add more buttons add more telemetry for debug purposes
-        telemetry.addLine("Imagine_Working??");
+        telemetry.addLine(Constants.brad());
+        telemetry.addData("Current Position",
+                "X %.2f | Y %.2f | rX %.2f", currentPosition
+        );
+        telemetry.addData("Vector",
+                "y %.2f | x %.2f | rx %.2f", vector
+        );
         telemetry.update();
     }
 }
