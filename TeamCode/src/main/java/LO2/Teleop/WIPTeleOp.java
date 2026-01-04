@@ -35,8 +35,8 @@ public class WIPTeleOp extends OpMode {
         backRight = hardwareMap.get(DcMotorEx.class, "br");
         gamepad = new Gamepad(gamepad1);
 
-        flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "wr");
-        flywheelLEFT = hardwareMap.get(DcMotorEx.class, "wl");
+        flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "flyf");
+        flywheelLEFT = hardwareMap.get(DcMotorEx.class, "flyb");
 //        //defines encoders
         loaderServo = hardwareMap.get(CRServo.class, "ls");
 

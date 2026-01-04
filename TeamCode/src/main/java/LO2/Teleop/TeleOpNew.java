@@ -43,8 +43,8 @@ public class TeleOpNew extends OpMode {
         fr = new Motor(hardwareMap.get(DcMotorEx.class, "fr"));
         bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"));
         br = new Motor(hardwareMap.get(DcMotorEx.class, "br"));
-        flyf = new Motor(hardwareMap.get(DcMotorEx.class, "wr"));
-        flyb = new Motor(hardwareMap.get(DcMotorEx.class, "wl"));
+        flyf = new Motor(hardwareMap.get(DcMotorEx.class, "flyf"));
+        flyb = new Motor(hardwareMap.get(DcMotorEx.class, "flyb"));
 
         loaderServo = hardwareMap.get(CRServo.class, "ls");
 
