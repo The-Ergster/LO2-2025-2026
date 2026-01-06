@@ -124,10 +124,12 @@ public class TeleOpNew extends OpMode {
         //If you add more buttons add more telemetry for debug purposes
         telemetry.addLine(Constants.brad());
         telemetry.addData("Current Position",
-                "X %.2f | Y %.2f | rX %.2f", currentPosition
+                "X %.2f         |        Y %.2f        |           rX %.2f",
+                currentPosition.getX(), currentPosition.getY(), currentPosition.getDirection()
         );
         telemetry.addData("Vector",
-                "y %.2f | x %.2f | rx %.2f", vector
+                   "y %.2f           |            x %.2f             |            rx %.2f",
+                vector.getVerticalVelocity(), vector.getHorizontalVelocity(), vector.getRotationalVelocity()
         );
         telemetry.update();
     }

@@ -34,7 +34,7 @@ public class OffsetTest extends OpMode {
         bl = new Motor(hardwareMap.get(DcMotorEx.class, "bl"),1200,2.5);
         gamepad = new Gamepad(gamepad1);
         pinpoint = hardwareMap.get(PinpointModule.class,"pinpoint");
-
+        driver = new MecanumDriver(fl, fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
         localizer = new PinpointLocalizer(pinpoint,
                 Constants.PINPOINT_X_OFFSET, PinpointModule.EncoderDirection.FORWARD,
                 Constants.PINPOINT_Y_OFFSET, PinpointModule.EncoderDirection.FORWARD,
@@ -54,8 +54,6 @@ public class OffsetTest extends OpMode {
         positionDisplay.setValue(localizer.getCurrentPosition());
         gamepad.loop();
 
-        driver.setRelativePower(
-                new MovementVector(0,0, gamepad.rightJoystick.getX())
-        );
+        driver.setRelativePower(new MovementVector(0,0, gamepad.rightJoystick.getX()));
     }
 }

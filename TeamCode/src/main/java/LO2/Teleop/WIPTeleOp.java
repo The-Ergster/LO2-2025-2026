@@ -1,5 +1,8 @@
 package LO2.Teleop;
 //Base level imports
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //Motor Import
@@ -7,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import codebase.gamepad.Gamepad;
@@ -21,6 +25,8 @@ public class WIPTeleOp extends OpMode {
     private DcMotor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
     private CRServo loaderServo;
+    private Limelight3A limelight;
+    private IMU imu;
     private Gamepad gamepad;
     private boolean rbPressedLast;
     private boolean rbPressedNow;
@@ -34,6 +40,9 @@ public class WIPTeleOp extends OpMode {
         backLeft = hardwareMap.get(DcMotorEx.class, "bl");
         backRight = hardwareMap.get(DcMotorEx.class, "br");
         gamepad = new Gamepad(gamepad1);
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(3);
+        imu = hardwareMap.get(IMU.class, "imu");
 
         flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "flyf");
         flywheelLEFT = hardwareMap.get(DcMotorEx.class, "flyb");
@@ -42,6 +51,11 @@ public class WIPTeleOp extends OpMode {
 
         rbPressedLast = false;
 
+        RevHubOrientationOnRobot orientation = new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP
+        );
+        imu.initialize(new IMU.Parameters(orientation));
 
         //configures direction
         frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
@@ -114,6 +128,7 @@ public class WIPTeleOp extends OpMode {
     public void start() {
         telemetry.addLine("Go go go!!!!! - (^_^)");
         telemetry.update();
+        limelight.start();
     }
 
     @Override
@@ -171,12 +186,16 @@ public class WIPTeleOp extends OpMode {
             loaderServo.setPower(0);
         }
 
+        LLResult result = limelight.getLatestResult();
+        double distance = Math.sqrt(Math.hypot(result.getTx(),result.getTy()));
 
         // Telemetry for movement
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-        telemetry.addData("Servo Power:", loaderServo.getPower());
+        if (result != null && result.isValid()){
+            telemetry.addData("Distance:", distance);
+        }
 
         telemetry.update();
     }
