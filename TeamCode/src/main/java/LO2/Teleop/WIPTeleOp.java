@@ -1,7 +1,5 @@
 package LO2.Teleop;
 //Base level imports
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -18,6 +16,12 @@ import codebase.gamepad.Gamepad;
 //Fun stuff
 import java.util.ArrayList;
 import java.util.Random;
+
+//Limelight
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.limelightvision.LLStatus;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 @TeleOp
 public class WIPTeleOp extends OpMode {
     //creates motor classes
@@ -41,7 +45,8 @@ public class WIPTeleOp extends OpMode {
         backRight = hardwareMap.get(DcMotorEx.class, "br");
         gamepad = new Gamepad(gamepad1);
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.pipelineSwitch(3);
+        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
+        limelight.start(); // This tells Limelight to start looking!
         imu = hardwareMap.get(IMU.class, "imu");
 
         flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "flyf");
@@ -193,9 +198,8 @@ public class WIPTeleOp extends OpMode {
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-        if (result != null && result.isValid()){
-            telemetry.addData("Distance:", distance);
-        }
+        telemetry.addData("Distance:", distance);
+
 
         telemetry.update();
     }
