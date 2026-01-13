@@ -148,7 +148,9 @@ public class WIPTeleOp extends OpMode {
     //Make sure all variables are in scope.
     @Override
     public void loop() {
-        double d = 5;
+
+        LLResult result = limelight.getLatestResult();
+        double d = Math.sqrt(Math.hypot(result.getTx(),result.getTy()));
         double y1 = 10;
         double y2 = 10;
         double vi = 10;
@@ -205,14 +207,14 @@ public class WIPTeleOp extends OpMode {
             loaderServo.setPower(0);
         }
 
-        LLResult result = limelight.getLatestResult();
-        double distance = Math.sqrt(Math.hypot(result.getTx(),result.getTy()));
+
 
         // Telemetry for movement
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-        telemetry.addData("Distance:", distance);
+        telemetry.addData("Distance:", d);
+        telemetry.addData("Angle",angle);
 
 
         telemetry.update();
