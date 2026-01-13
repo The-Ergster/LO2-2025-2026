@@ -17,6 +17,7 @@ import codebase.gamepad.Gamepad;
 import java.util.ArrayList;
 import java.util.Random;
 
+import java.lang.Math;
 //Limelight
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
@@ -90,6 +91,8 @@ public class WIPTeleOp extends OpMode {
         phrases.add("'Thinking noises'");
         phrases.add("Bring me a shrubbery!");
         phrases.add("Give me a second, I'm thinking");
+        phrases.add("Are you working on the limelight, Elliot?");
+        phrases.add("Estimated blast radius: 200 meters");
 
 
 
@@ -97,7 +100,7 @@ public class WIPTeleOp extends OpMode {
 
         int element;
         Random random = new Random();
-        element = random.nextInt(11);
+        element = random.nextInt(13);
 
 
         telemetry.addLine(phrases.get(element));
@@ -145,6 +148,17 @@ public class WIPTeleOp extends OpMode {
     //Make sure all variables are in scope.
     @Override
     public void loop() {
+        double d = 5;
+        double y1 = 10;
+        double y2 = 10;
+        double vi = 10;
+
+        double angle = Math.acos( (9.8 * Math.sqrt(d * d + y1 * y1) ) / (vi * Math.sqrt(19.6 * (y2*y2) ) ) );
+
+
+
+
+
         gamepad.loop();
         isParking = gamepad1.left_bumper;
 
