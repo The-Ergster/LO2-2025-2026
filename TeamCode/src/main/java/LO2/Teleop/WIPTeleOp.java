@@ -181,8 +181,8 @@ public class WIPTeleOp extends OpMode {
 
 
         if (gamepad1.x) {
-            flywheelRIGHT.setPower(-1);
-            flywheelLEFT.setPower(1);
+            flywheelRIGHT.setPower(-.2);
+            flywheelLEFT.setPower(.2);
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -197,8 +197,8 @@ public class WIPTeleOp extends OpMode {
             loaderServo.setPower(-1);
 
         } else if (gamepad1.y) {
-            flywheelRIGHT.setPower(1);
-            flywheelLEFT.setPower(-1);
+            flywheelRIGHT.setPower(.2);
+            flywheelLEFT.setPower(.2);
             loaderServo.setPower(-1);
         }
         else {
