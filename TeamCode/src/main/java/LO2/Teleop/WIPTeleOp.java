@@ -50,8 +50,8 @@ public class WIPTeleOp extends OpMode {
         limelight.start(); // This tells Limelight to start looking!
         imu = hardwareMap.get(IMU.class, "imu");
 
-        flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "flyf");
-        flywheelLEFT = hardwareMap.get(DcMotorEx.class, "flyb");
+        flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "wr");
+        flywheelLEFT = hardwareMap.get(DcMotorEx.class, "wl");
 //        //defines encoders
         loaderServo = hardwareMap.get(CRServo.class, "ls");
 
