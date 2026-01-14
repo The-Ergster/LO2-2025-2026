@@ -151,8 +151,8 @@ public class WIPTeleOp extends OpMode {
 
         LLResult result = limelight.getLatestResult();
         double d = Math.sqrt(Math.hypot(result.getTx(),result.getTy()));
-        double y1 = 10;
-        double y2 = 10;
+        double y1 = .43;
+        double y2 = .9;
         double vi = 10;
 
         double angle = Math.acos( (9.8 * Math.sqrt(d * d + y1 * y1) ) / (vi * Math.sqrt(19.6 * (y2*y2) ) ) );
