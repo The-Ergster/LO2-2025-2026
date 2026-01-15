@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import codebase.gamepad.Gamepad;
 
@@ -20,22 +19,18 @@ import java.util.Random;
 import java.lang.Math;
 //Limelight
 import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
-import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 @TeleOp
-public class WIPTeleOp extends OpMode {
+public class WIPTeleOpLemon extends OpMode {
     //creates motor classes
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
     private DcMotor flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
     private CRServo loaderServo;
-    private Limelight3A limelight;
-    private IMU imu;
+
+
     private Gamepad gamepad;
-    private boolean rbPressedLast;
-    private boolean rbPressedNow;
-    private boolean isParking;
+
 
     @Override
     public void init() {
@@ -45,23 +40,15 @@ public class WIPTeleOp extends OpMode {
         backLeft = hardwareMap.get(DcMotorEx.class, "bl");
         backRight = hardwareMap.get(DcMotorEx.class, "br");
         gamepad = new Gamepad(gamepad1);
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
-        limelight.start(); // This tells Limelight to start looking!
-        imu = hardwareMap.get(IMU.class, "imu");
+
 
         flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "wr");
         flywheelLEFT = hardwareMap.get(DcMotorEx.class, "wl");
 //        //defines encoders
         loaderServo = hardwareMap.get(CRServo.class, "ls");
 
-        rbPressedLast = false;
 
-        RevHubOrientationOnRobot orientation = new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP
-        );
-        imu.initialize(new IMU.Parameters(orientation));
+
 
         //configures direction
         frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
@@ -136,7 +123,6 @@ public class WIPTeleOp extends OpMode {
     public void start() {
         telemetry.addLine("Go go go!!!!! - (^_^)");
         telemetry.update();
-        limelight.start();
     }
 
     @Override
@@ -149,20 +135,11 @@ public class WIPTeleOp extends OpMode {
     @Override
     public void loop() {
 
-        LLResult result = limelight.getLatestResult();
-        double d = Math.sqrt(Math.hypot(result.getTx(),result.getTy()));
-        double y1 = .4579;
-        double y2 = .7996;
-        double vi = 10;
-
-        double angle = Math.acos( (9.8 * Math.sqrt(d * d + y1 * y1) ) / (vi * Math.sqrt(19.6 * (y2*y2) ) ) );
-
 
 
 
 
         gamepad.loop();
-        isParking = gamepad1.left_bumper;
 
         //actual code for movement
         //takes value from joysticks
@@ -170,14 +147,7 @@ public class WIPTeleOp extends OpMode {
         double x = gamepad1.left_stick_x;  // Strafing
         double rx = gamepad1.right_stick_x; // Rotation
 
-        if (isParking) {
-             y = -gamepad1.left_stick_y * 0.5; // Forward/Backward
-             x = gamepad1.left_stick_x * 0.5;  // Strafing
-             rx = gamepad1.right_stick_x * 0.5; // Rotation
-            driveOmni(y,rx,x);
-        }else{
-            driveOmni(y,rx,x);
-        }
+        driveOmni(y,rx,x);
 
 
         if (gamepad1.x) {
@@ -213,8 +183,6 @@ public class WIPTeleOp extends OpMode {
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-        telemetry.addData("Distance:", d);
-        telemetry.addData("Angle",angle);
 
 
         telemetry.update();
