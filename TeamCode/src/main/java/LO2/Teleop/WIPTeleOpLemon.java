@@ -80,6 +80,7 @@ public class WIPTeleOpLemon extends OpMode {
         phrases.add("Give me a second, I'm thinking");
         phrases.add("Are you working on the limelight, Elliot?");
         phrases.add("Estimated blast radius: 200 meters");
+        phrases.add("lemons");
 
 
 
@@ -87,7 +88,7 @@ public class WIPTeleOpLemon extends OpMode {
 
         int element;
         Random random = new Random();
-        element = random.nextInt(13);
+        element = random.nextInt(14);
 
 
         telemetry.addLine(phrases.get(element));
