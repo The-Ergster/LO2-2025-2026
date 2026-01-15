@@ -40,7 +40,8 @@ public class Constants {
             "duct tape..!",
             "Are you working on the limelight, Elliot?",
             "Estimated blast radius: 200 meters",
-            "bug free since 2038"
+            "bug free since 2038",
+            "No one knows what gradle is, but all fear it"
 
     );
 
