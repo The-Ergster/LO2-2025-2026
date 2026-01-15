@@ -95,6 +95,10 @@ public class TeleOpNew extends OpMode {
                 });
     }
 
+    public void start(){
+        telemetry.addLine(Constants.brad());
+        telemetry.update();
+    }
     @Override
     public void loop() {
         localizer.loop();
@@ -122,7 +126,7 @@ public class TeleOpNew extends OpMode {
 
         // Telemetry
         //If you add more buttons add more telemetry for debug purposes
-        telemetry.addLine(Constants.brad());
+
         telemetry.addData("Current Position",
                 "X %.2f         |        Y %.2f        |           rX %.2f",
                 currentPosition.getX(), currentPosition.getY(), currentPosition.getDirection()

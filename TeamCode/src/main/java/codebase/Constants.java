@@ -37,7 +37,11 @@ public class Constants {
             "Bring me a shrubbery!",
             "Give me a second, I'm thinking",
             "Oh my god I'm blooming", //requested, wasn't me
-            "duct tape..!"
+            "duct tape..!",
+            "Are you working on the limelight, Elliot?",
+            "Estimated blast radius: 200 meters",
+            "bug free since 2038"
+
     );
 
     public static String brad(){

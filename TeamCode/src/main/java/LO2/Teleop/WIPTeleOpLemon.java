@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import codebase.Constants;
 import codebase.gamepad.Gamepad;
 
 //Fun stuff
@@ -61,38 +62,18 @@ public class WIPTeleOpLemon extends OpMode {
         backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         telemetry.addLine("Initiated Version 1.2");
         telemetry.addLine("(^_^)");
         telemetry.addLine("Brad says good luck!");
-        ArrayList<String> phrases = new ArrayList<>();
-
-        // Add elements to the list
-        phrases.add("Coding: It Works");
-        phrases.add("The Universe is gone!!.... Never mind it's still here");
-        phrases.add("The Cake Is A Lie!");
-        phrases.add("; expected ");
-        phrases.add("Shaw!");
-        phrases.add("200 killed in rogue servo accident");
-        phrases.add("I say potato, you say 'ERROR cannot resolve line'");
-        phrases.add("There is no Spoon");
-        phrases.add("'Thinking noises'");
-        phrases.add("Bring me a shrubbery!");
-        phrases.add("Give me a second, I'm thinking");
-        phrases.add("Are you working on the limelight, Elliot?");
-        phrases.add("Estimated blast radius: 200 meters");
-        phrases.add("lemons");
-
-
-
-
-
-        int element;
-        Random random = new Random();
-        element = random.nextInt(14);
-
-
-        telemetry.addLine(phrases.get(element));
+        telemetry.addLine(Constants.brad());
         telemetry.update();
+        // Add elements to the list
+
     }
 
 
@@ -155,7 +136,7 @@ public class WIPTeleOpLemon extends OpMode {
             flywheelRIGHT.setPower(-.5);
             flywheelLEFT.setPower(.5);
             try {
-                Thread.sleep(500);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

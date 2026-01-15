@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import java.util.ArrayList;
 import java.util.Random;
 
+import codebase.Constants;
 import codebase.gamepad.Gamepad;
 
 @TeleOp
@@ -24,11 +25,8 @@ public class WIPTeleOpLime extends OpMode {
     //Creates Servo Classes
     private CRServo loaderServo;
     private Limelight3A limelight;
-    private IMU imu;
     private Gamepad gamepad;
-    private boolean rbPressedLast;
-    private boolean rbPressedNow;
-    private boolean isParking;
+
 
     @Override
     public void init() {
@@ -41,20 +39,14 @@ public class WIPTeleOpLime extends OpMode {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
         limelight.start(); // This tells Limelight to start looking!
-        imu = hardwareMap.get(IMU.class, "imu");
 
         flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "wr");
         flywheelLEFT = hardwareMap.get(DcMotorEx.class, "wl");
 //        //defines encoders
         loaderServo = hardwareMap.get(CRServo.class, "ls");
 
-        rbPressedLast = false;
 
-        RevHubOrientationOnRobot orientation = new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP
-        );
-        imu.initialize(new IMU.Parameters(orientation));
+
 
         //configures direction
         frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
@@ -67,37 +59,15 @@ public class WIPTeleOpLime extends OpMode {
         backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         telemetry.addLine("Initiated Version 1.2");
         telemetry.addLine("(^_^)");
         telemetry.addLine("Brad says good luck!");
-        ArrayList<String> phrases = new ArrayList<>();
-
-        // Add elements to the list
-        phrases.add("Coding: It Works");
-        phrases.add("The Universe is gone!!.... Never mind it's still here");
-        phrases.add("The Cake Is A Lie!");
-        phrases.add("; expected ");
-        phrases.add("Shaw!");
-        phrases.add("200 killed in rogue servo accident");
-        phrases.add("I say potato, you say 'ERROR cannot resolve line'");
-        phrases.add("There is no Spoon");
-        phrases.add("'Thinking noises'");
-        phrases.add("Bring me a shrubbery!");
-        phrases.add("Give me a second, I'm thinking");
-        phrases.add("Are you working on the limelight, Elliot?");
-        phrases.add("Estimated blast radius: 200 meters");
-        phrases.add("limes");
-
-
-
-
-
-        int element;
-        Random random = new Random();
-        element = random.nextInt(14);
-
-
-        telemetry.addLine(phrases.get(element));
+        telemetry.addLine(Constants.brad());
         telemetry.update();
     }
 
@@ -156,7 +126,6 @@ public class WIPTeleOpLime extends OpMode {
 
 
         gamepad.loop();
-        isParking = gamepad1.left_bumper;
 
         //actual code for movement
         //takes value from joysticks
@@ -164,21 +133,14 @@ public class WIPTeleOpLime extends OpMode {
         double x = gamepad1.left_stick_x;  // Strafing
         double rx = gamepad1.right_stick_x; // Rotation
 
-        if (isParking) {
-             y = -gamepad1.left_stick_y * 0.5; // Forward/Backward
-             x = gamepad1.left_stick_x * 0.5;  // Strafing
-             rx = gamepad1.right_stick_x * 0.5; // Rotation
-            driveOmni(y,rx,x);
-        }else{
-            driveOmni(y,rx,x);
-        }
+        driveOmni(y,rx,x);
 
 
         if (gamepad1.x) {
             flywheelRIGHT.setPower(-.5);
             flywheelLEFT.setPower(.5);
             try {
-                Thread.sleep(500);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
