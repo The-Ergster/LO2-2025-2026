@@ -159,14 +159,16 @@ public class WIPTeleOpLemon extends OpMode {
             loaderServo.setPower(0);
         }
 
-
+        double flv = frontLeft.getVelocity();
+        double frv = frontRight.getVelocity();
+        double blv = backLeft.getVelocity();
+        double brv = backRight.getVelocity();
 
         // Telemetry for movement
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-
-
+        telemetry.addData("Velocity","FL | FR | BL | BR", flv, frv, blv, brv);
         telemetry.update();
     }
 }
