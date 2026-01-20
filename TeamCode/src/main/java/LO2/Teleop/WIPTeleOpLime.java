@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -38,6 +37,7 @@ public class WIPTeleOpLime extends OpMode {
         gamepad = new Gamepad(gamepad1);
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
+        limelight.pipelineSwitch(0);
         limelight.start(); // This tells Limelight to start looking!
 
         flywheelRIGHT = hardwareMap.get(DcMotorEx.class, "wr");
@@ -112,6 +112,7 @@ public class WIPTeleOpLime extends OpMode {
     //Make sure all variables are in scope.
     @Override
     public void loop() {
+        gamepad.loop();
 
         LLResult result = limelight.getLatestResult();
         double d = Math.sqrt(Math.hypot(result.getTx(),result.getTy()));
@@ -123,9 +124,23 @@ public class WIPTeleOpLime extends OpMode {
 
 
 
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        NetworkTableEntry ty = table.getEntry("ty");
+        double tagOffset = ty.getDouble(0.0);
 
+        // how many degrees back is your limelight rotated from perfectly vertical
+        double limelightMountAngle = 0.0; 
 
-        gamepad.loop();
+        // distance from the center of the Limelight lens to the floor
+        double limelightHeightInches = 16.0; 
+
+        // distance from the target to the floor
+        double tagHeightInches = 38.75 - 9.25; 
+
+        double angleToGoal = angleUnit.toRadians(limelightMountAngle + tagOffset); 
+
+        //calculate distance
+        double distanceToGoalInches = (goalHeightInches - limelightHeightInches) / Math.tan(angleToGoal);
 
         //actual code for movement
         //takes value from joysticks
@@ -171,7 +186,7 @@ public class WIPTeleOpLime extends OpMode {
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
         telemetry.addData("Distance:", d);
         telemetry.addData("Angle",angle);
-
+        telemetry.addData("Distance1:", distanceToGoalInches);
 
         telemetry.update();
     }
