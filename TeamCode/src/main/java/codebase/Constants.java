@@ -51,7 +51,8 @@ public class Constants {
             "Now owned by Amazon Web Services",
             "Do you know the muffin man?",
             "Don't push code Shawn",
-            "Anish is short - Zack"
+            "Anish is short - Zack",
+            "Gunpowder gelatine, dynamite with a lazer beam."
     );
 
     public static String brad(){
