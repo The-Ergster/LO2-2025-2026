@@ -40,35 +40,6 @@ public class AutoSafeRed extends OpMode {
         backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        List<String> phrases = new ArrayList<String>();
-
-        // Add elements to the list
-        phrases.add("Coding: It Works");
-        phrases.add("The Universe is gone!!.... Never mind it's still here");
-        phrases.add("The Cake Is A Lie!");
-        phrases.add("; expected ");
-        phrases.add("Shaw!");
-        phrases.add("200 killed in rogue servo accident");
-        phrases.add("I say potato, you say 'ERROR cannot resolve line'");
-        phrases.add("There is no Spoon");
-        phrases.add("'Thinking noises'");
-        phrases.add("Bring me a shrubbery!");
-        phrases.add("Pull The Lever Kronk");
-        phrases.add("'gasping noises'");
-        phrases.add("'wheel work'");
-        phrases.add("robot-core");
-        phrases.add("Auto-bots, Roll out!");
-
-
-
-
-
-        int element;
-        Random random = new Random();
-        element = random.nextInt(15);
-
-        telemetry.addLine(phrases.get(element));
-        telemetry.update();
     }
 
     public void start(){
@@ -78,7 +49,7 @@ public class AutoSafeRed extends OpMode {
         frontRight.setVelocity(-4661);
         backRight.setVelocity(-4661);
         try {
-            Thread.sleep(200);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -110,6 +81,17 @@ public class AutoSafeRed extends OpMode {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        frontLeft.setVelocity(4661);
+        backLeft.setVelocity(4661);
+        frontRight.setVelocity(4661);
+        backRight.setVelocity(4661);
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         frontLeft.setVelocity(0);
         backLeft.setVelocity(0);
         frontRight.setVelocity(0);
