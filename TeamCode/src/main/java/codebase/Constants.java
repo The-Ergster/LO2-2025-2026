@@ -50,7 +50,8 @@ public class Constants {
             "Maggie shot Mr. Burns",
             "Now owned by Amazon Web Services",
             "Do you know the muffin man?",
-            "Don't push code Shawn"
+            "Don't push code Shawn",
+            "Anish is short - Zack"
     );
 
     public static String brad(){
