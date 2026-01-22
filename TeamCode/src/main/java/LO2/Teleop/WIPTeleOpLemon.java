@@ -1,6 +1,6 @@
 package LO2.Teleop;
+
 //Base level imports
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //Motor Import
@@ -8,24 +8,16 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import codebase.Constants;
 import codebase.gamepad.Gamepad;
-
-//Fun stuff
-import java.util.ArrayList;
-import java.util.Random;
-
 import java.lang.Math;
-//Limelight
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
+
 @TeleOp
 public class WIPTeleOpLemon extends OpMode {
     //creates motor classes
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
-    private DcMotor flywheelRIGHT, flywheelLEFT;
+    private DcMotorEx flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
     private CRServo loaderServo;
 
@@ -56,6 +48,8 @@ public class WIPTeleOpLemon extends OpMode {
         backLeft.setDirection(DcMotorEx.Direction.REVERSE);
         frontRight.setDirection(DcMotorEx.Direction.FORWARD);
         backRight.setDirection(DcMotorEx.Direction.FORWARD);
+        flywheelLEFT.setDirection(DcMotorEx.Direction.FORWARD);
+        flywheelRIGHT.setDirection(DcMotorEx.Direction.REVERSE);
 
         frontLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -133,8 +127,8 @@ public class WIPTeleOpLemon extends OpMode {
 
 
         if (gamepad1.x) {
-            flywheelRIGHT.setPower(-.5);
-            flywheelLEFT.setPower(.5);
+            flywheelRIGHT.setPower(0.5);
+            flywheelLEFT.setPower(0.5);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -149,8 +143,8 @@ public class WIPTeleOpLemon extends OpMode {
             loaderServo.setPower(-1);
 
         } else if (gamepad1.y) {
-            flywheelRIGHT.setPower(.5);
-            flywheelLEFT.setPower(-.5);
+            flywheelRIGHT.setPower(0.5);
+            flywheelLEFT.setPower(0.5);
             loaderServo.setPower(-1);
         }
         else {
@@ -159,16 +153,10 @@ public class WIPTeleOpLemon extends OpMode {
             loaderServo.setPower(0);
         }
 
-        double flv = frontLeft.getVelocity();
-        double frv = frontRight.getVelocity();
-        double blv = backLeft.getVelocity();
-        double brv = backRight.getVelocity();
-
         // Telemetry for movement
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-        telemetry.addData("Velocity","FL | FR | BL | BR", flv, frv, blv, brv);
         telemetry.update();
     }
 }

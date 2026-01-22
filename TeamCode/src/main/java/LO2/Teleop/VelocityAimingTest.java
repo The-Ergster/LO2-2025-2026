@@ -1,17 +1,12 @@
 package LO2.Teleop;
-//Base level imports
 
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+//Base level imports
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import java.util.ArrayList;
-import java.util.Random;
 
 import codebase.Constants;
 import codebase.gamepad.Gamepad;
@@ -20,7 +15,7 @@ import codebase.gamepad.Gamepad;
 public class VelocityAimingTest extends OpMode {
     //creates motor classes
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
-    private DcMotor flywheelRIGHT, flywheelLEFT;
+    private DcMotorEx flywheelRIGHT, flywheelLEFT;
     //Creates Servo Classes
     private CRServo loaderServo;
     private Gamepad gamepad;
@@ -45,11 +40,15 @@ public class VelocityAimingTest extends OpMode {
         backLeft.setDirection(DcMotorEx.Direction.REVERSE);
         frontRight.setDirection(DcMotorEx.Direction.FORWARD);
         backRight.setDirection(DcMotorEx.Direction.FORWARD);
+        flywheelLEFT.setDirection(DcMotorEx.Direction.FORWARD);
+        flywheelRIGHT.setDirection(DcMotorEx.Direction.REVERSE);
 
         frontLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        flywheelRIGHT.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        flywheelLEFT.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -103,6 +102,19 @@ public class VelocityAimingTest extends OpMode {
     //Make sure all variables are in scope.
     @Override
     public void loop() {
+
+        double testMeters = 0.67;
+        if (gamepad.dpadUp.isPressed()) {
+            testMeters += 0.1;
+        }
+        if (gamepad.dpadDown.isPressed()) {
+            testMeters -= 0.1;
+        }
+        double initVelocity = ((9.8 * Math.pow(testMeters,2)) / (2*0.030153689607 - (testMeters*0.342020143-1.143)));
+        double rotationsPerMin = initVelocity/(0.096*Math.PI);
+        double ticksPerSecond = (112*rotationsPerMin)/60;
+
+
         gamepad.loop();
 
         //actual code for movement
@@ -115,8 +127,8 @@ public class VelocityAimingTest extends OpMode {
 
 
         if (gamepad1.x) {
-            flywheelRIGHT.setPower(-.5);
-            flywheelLEFT.setPower(.5);
+            flywheelRIGHT.setVelocity(ticksPerSecond);
+            flywheelLEFT.setPower(ticksPerSecond);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -131,8 +143,8 @@ public class VelocityAimingTest extends OpMode {
             loaderServo.setPower(-1);
 
         } else if (gamepad1.y) {
-            flywheelRIGHT.setPower(.5);
-            flywheelLEFT.setPower(-.5);
+            flywheelRIGHT.setPower(ticksPerSecond);
+            flywheelLEFT.setPower(ticksPerSecond);
             loaderServo.setPower(-1);
         }
         else {
@@ -141,14 +153,6 @@ public class VelocityAimingTest extends OpMode {
             loaderServo.setPower(0);
         }
 
-        double test = 0.67;
-        if (gamepad.dpadUp.isPressed()) {
-            test += 0.3;
-        }
-        if (gamepad.dpadDown.isPressed()) {
-            test -= 0.3;
-        }
-        double initVelocity = ((9.8 * Math.pow(test,2)) / (2*(1.143)*(0.030153689607)) - (test*0.342020143));
 
         // Telemetry for movement
         //If you add more buttons add more telemetry so we know whats going through
@@ -156,6 +160,6 @@ public class VelocityAimingTest extends OpMode {
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
         telemetry.update();
         telemetry.addData("initVelocity", initVelocity);
-
+        telemetry.addData("ticksPerSecond", ticksPerSecond);
     }
 }
