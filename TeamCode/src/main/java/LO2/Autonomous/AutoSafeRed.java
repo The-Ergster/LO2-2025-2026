@@ -49,7 +49,7 @@ public class AutoSafeRed extends OpMode {
         frontRight.setVelocity(-4661);
         backRight.setVelocity(-4661);
         try {
-            Thread.sleep(500);
+            Thread.sleep(267);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -60,7 +60,7 @@ public class AutoSafeRed extends OpMode {
         flywheelRIGHT.setPower(-0.5);
         flywheelLEFT.setPower(0.5);
         try {
-            Thread.sleep(500);
+            Thread.sleep(750);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
