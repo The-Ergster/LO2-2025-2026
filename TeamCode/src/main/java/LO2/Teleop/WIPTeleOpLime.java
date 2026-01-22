@@ -115,7 +115,7 @@ public class WIPTeleOpLime extends OpMode {
        gamepad.loop();
 
        LLResult result = limelight.getLatestResult();
-       area = result.getTa();
+       //area = result.getTa();
        double d = Math.sqrt(Math.hypot(result.getTx(),result.getTy()));
        double y1 = .4579;
        double y2 = .7996;
@@ -169,7 +169,7 @@ public class WIPTeleOpLime extends OpMode {
        telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
        telemetry.addData("Distance:", d);
        telemetry.addData("Angle",angle);
-       telemetry.addData("Area:", area);
+       //telemetry.addData("Area:", area);
        telemetry.update();
    }
 }
