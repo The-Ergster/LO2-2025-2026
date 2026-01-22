@@ -173,5 +173,3 @@ public class WIPTeleOpLime extends OpMode {
        telemetry.update();
    }
 }
-
-//good job
