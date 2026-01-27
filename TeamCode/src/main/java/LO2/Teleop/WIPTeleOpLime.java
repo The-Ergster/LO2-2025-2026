@@ -138,7 +138,7 @@ public class WIPTeleOpLime extends OpMode {
            flywheelRIGHT.setPower(0.5);
            flywheelLEFT.setPower(0.5);
            try {
-               Thread.sleep(1000);
+               Thread.sleep(1500);
            } catch (InterruptedException e) {
                throw new RuntimeException(e);
            }
