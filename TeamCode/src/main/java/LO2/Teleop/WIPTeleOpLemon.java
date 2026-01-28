@@ -75,7 +75,6 @@ public class WIPTeleOpLemon extends OpMode {
 
         final double MAX_TICKS_PER_SECOND = 4661;
 
-
         //math stuff for movement
         //power is on scale of -1 to 1
         //adds up input from controller (y, x, rx) divides by the biggest value between whatever the x, y and rx add up to or 1.
@@ -85,8 +84,25 @@ public class WIPTeleOpLemon extends OpMode {
         double frPower = (y - x - rx) / maxValue;
         double brPower = (y + x - rx) / maxValue;
 
+        //Sets velocity on a scale from -MAX_TICKS_PER_SECOND to +MAX_TICKS_PER_SECOND
+        frontLeft.setVelocity(flPower * MAX_TICKS_PER_SECOND);
+        backLeft.setVelocity(blPower * MAX_TICKS_PER_SECOND);
+        frontRight.setVelocity(frPower * MAX_TICKS_PER_SECOND);
+        backRight.setVelocity(brPower * MAX_TICKS_PER_SECOND);
+    }
 
+    public void driveOmni(double y, double rx, double x, double scale) {
 
+        final double MAX_TICKS_PER_SECOND = 4661;
+
+        //math stuff for movement
+        //power is on scale of -1 to 1
+        //adds up input from controller (y, x, rx) divides by the biggest value between whatever the x, y and rx add up to or 1.
+        double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double flPower = (y + x + rx) / maxValue;
+        double blPower = (y - x + rx) / maxValue;
+        double frPower = (y - x - rx) / maxValue;
+        double brPower = (y + x - rx) / maxValue;
 
         //Sets velocity on a scale from -MAX_TICKS_PER_SECOND to +MAX_TICKS_PER_SECOND
         frontLeft.setVelocity(flPower * MAX_TICKS_PER_SECOND);
@@ -110,11 +126,6 @@ public class WIPTeleOpLemon extends OpMode {
     //Make sure all variables are in scope.
     @Override
     public void loop() {
-
-
-
-
-
         gamepad.loop();
 
         //actual code for movement
@@ -122,13 +133,14 @@ public class WIPTeleOpLemon extends OpMode {
         double y = -gamepad1.left_stick_y; // Forward/Backward
         double x = gamepad1.left_stick_x;  // Strafing
         double rx = gamepad1.right_stick_x; // Rotation
+        double parking = gamepad1.right_bumper ? 0.5 : 1.0; // parking?
 
-        driveOmni(y,rx,x);
+        driveOmni(y,rx,x, parking);
 
 
         if (gamepad1.x) {
-            flywheelRIGHT.setPower(0.5);
-            flywheelLEFT.setPower(0.5);
+            flywheelRIGHT.setVelocity(3300);
+            flywheelLEFT.setVelocity(3300);
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException e) {
