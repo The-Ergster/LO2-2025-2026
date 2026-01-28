@@ -42,11 +42,11 @@ public class TestSquareAuto extends OpMode {
         loaderServo = hardwareMap.get(CRServo.class, "ls");
         pinpoint = hardwareMap.get(PinpointModule.class, "pinpoint");
         driver = new MecanumDriver(fl, fr, bl, br, Constants.MECANUM_COEFFICIENT_MATRIX);
-//        localizer = new PinpointLocalizer(pinpoint,
-//                Constants.PINPOINT_X_OFFSET, PinpointModule.EncoderDirection.FORWARD,
-//                Constants.PINPOINT_Y_OFFSET, PinpointModule.EncoderDirection.FORWARD,
-//                PinpointModule.GoBildaOdometryPods.goBILDA_SWINGARM_POD
-//        );
+        localizer = new PinpointLocalizer(pinpoint,
+                Constants.PINPOINT_X_OFFSET, PinpointModule.EncoderDirection.FORWARD,
+                Constants.PINPOINT_Y_OFFSET, PinpointModule.EncoderDirection.FORWARD,
+                PinpointModule.GoBildaOdometryPods.goBILDA_SWINGARM_POD
+        );
         LaunchAction.setLaunchActionMotors(loaderServo, flyf, flyb);
         MoveToAction.setDriverAndLocalizer(driver,localizer);
         currentPosition = new FieldPosition(0, 0, 0);
