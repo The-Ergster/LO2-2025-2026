@@ -139,8 +139,8 @@ public class WIPTeleOpCitrus extends OpMode {
 
 
         if (gamepad1.x) {
-            flywheelRIGHT.setVelocity(875);
-            flywheelLEFT.setVelocity(875);
+            flywheelRIGHT.setVelocity(2520);
+            flywheelLEFT.setVelocity(2520);
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException e) {
