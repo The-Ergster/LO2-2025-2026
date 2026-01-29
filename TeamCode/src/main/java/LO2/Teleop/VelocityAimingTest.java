@@ -158,8 +158,8 @@ public class VelocityAimingTest extends OpMode {
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-        telemetry.update();
         telemetry.addData("initVelocity", initVelocity);
         telemetry.addData("ticksPerSecond", ticksPerSecond);
+        telemetry.update();
     }
 }

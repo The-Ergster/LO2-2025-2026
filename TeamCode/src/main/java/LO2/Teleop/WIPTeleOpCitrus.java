@@ -14,7 +14,7 @@ import codebase.gamepad.Gamepad;
 import java.lang.Math;
 
 @TeleOp
-public class WIPTeleOpLemon extends OpMode {
+public class WIPTeleOpCitrus extends OpMode {
     //creates motor classes
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
     private DcMotorEx flywheelRIGHT, flywheelLEFT;
@@ -139,8 +139,8 @@ public class WIPTeleOpLemon extends OpMode {
 
 
         if (gamepad1.x) {
-            flywheelRIGHT.setVelocity(875);
-            flywheelLEFT.setVelocity(875);
+            flywheelRIGHT.setVelocity(2520);
+            flywheelLEFT.setVelocity(2520);
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException e) {
