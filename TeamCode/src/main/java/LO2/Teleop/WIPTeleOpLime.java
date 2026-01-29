@@ -95,22 +95,25 @@ public class WIPTeleOpLime extends OpMode {
 
     public void driveOmni(double y, double rx, double x, double scale) {
 
-        final double MAX_TICKS_PER_SECOND = 4661;
+        frontLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        //math stuff for movement
+
         //power is on scale of -1 to 1
         //adds up input from controller (y, x, rx) divides by the biggest value between whatever the x, y and rx add up to or 1.
         double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         double flPower = (y + x + rx) / maxValue;
-        double blPower = (y - x + rx) / maxValue;
-        double frPower = (y - x - rx) / maxValue;
-        double brPower = (y + x - rx) / maxValue;
+        double blPower = (y - x + rx)  / maxValue;
+        double frPower = (y - x - rx)  / maxValue;
+        double brPower = (y + x - rx)/ maxValue;
 
         //Sets velocity on a scale from -MAX_TICKS_PER_SECOND to +MAX_TICKS_PER_SECOND
-        frontLeft.setVelocity(flPower * MAX_TICKS_PER_SECOND * scale);
-        backLeft.setVelocity(blPower * MAX_TICKS_PER_SECOND * scale);
-        frontRight.setVelocity(frPower * MAX_TICKS_PER_SECOND * scale);
-        backRight.setVelocity(brPower * MAX_TICKS_PER_SECOND * scale);
+        frontLeft.setPower(flPower  * scale);
+        frontRight.setPower(frPower  * scale);
+        backLeft.setPower(blPower  * scale);
+        backRight.setPower(brPower  * scale);
     }
 
    @Override
@@ -146,10 +149,13 @@ public class WIPTeleOpLime extends OpMode {
        double y = gamepad.leftJoystick.getY(); // Forward/Backward
        double x = gamepad.leftJoystick.getX();  // Strafing
        double rx = gamepad.rightJoystick.getX(); // Rotation
-       double parking = gamepad.rightBumper.isPressed() ? 0.5 : 1.0; // parking?
+       double parking = gamepad.rightJoystickButton.isToggled() ? 0.5 : 1.0;
 
-       driveOmni(y,rx,x, parking);
-
+       if(gamepad.rightJoystickButton.isToggled()) {
+           driveOmni(y,rx,x,parking);
+       } else {
+           driveOmni(y,rx,x);
+       }
 
        if (gamepad.xButton.isPressed()) {
            flywheelRIGHT.setVelocity(875);
@@ -178,8 +184,6 @@ public class WIPTeleOpLime extends OpMode {
            loaderServo.setPower(0);
        }
 
-
-
        // Telemetry for movement
        //If you add more buttons add more telemetry so we know whats going through
        //Debug purposes only
@@ -187,7 +191,6 @@ public class WIPTeleOpLime extends OpMode {
        telemetry.addData("velocity", velocity);
        telemetry.addData("rpm", rpm);
        telemetry.addData("Area:", area);
-       telemetry.addData("park", parking);
        telemetry.update();
    }
 }
