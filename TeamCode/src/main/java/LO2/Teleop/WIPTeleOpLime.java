@@ -133,18 +133,17 @@ public class WIPTeleOpLime extends OpMode {
 
        LLResult result = limelight.getLatestResult();
        double area = result.getTa();
-       double d = Math.sqrt(Math.hypot(result.getTx(),result.getTy()));
-       double y1 = .4579;
-       double y2 = .7996;
-       double vi = 10;
+       //regression
+       double distance = 2.43*Math.pow(area, 4) - 14.90409*Math.pow(area, 3) + 35.43912*Math.pow(area, 2) - 40.1374*area + 19.76406;
 
-       double angle = Math.acos( (9.8 * Math.sqrt(d * d + y1 * y1) ) / (vi * Math.sqrt(19.6 * (y2*y2) ) ) );
+       //thanks will in meters/sec
+       double velocity = (9.8*Math.pow(distance, 2)) / (2 * 1.143 * Math.pow(Math.cos(80),2) - distance * Math.sin(20));
 
-
+       double rpm = (2*Math.PI * 0.048 / 60) / velocity;
 
        //actual code for movement
        //takes value from joysticks
-       double y = -gamepad.leftJoystick.getY(); // Forward/Backward
+       double y = gamepad.leftJoystick.getY(); // Forward/Backward
        double x = gamepad.leftJoystick.getX();  // Strafing
        double rx = gamepad.rightJoystick.getX(); // Rotation
        double parking = gamepad.rightBumper.isPressed() ? 0.5 : 1.0; // parking?
@@ -170,7 +169,7 @@ public class WIPTeleOpLime extends OpMode {
 
        } else if (gamepad.yButton.isPressed()) {
            flywheelRIGHT.setPower(0.5);
-           flywheelLEFT.setPower(0.5);
+           flywheelLEFT.setPower(-0.5);
            loaderServo.setPower(-1);
        }
        else {
@@ -185,9 +184,10 @@ public class WIPTeleOpLime extends OpMode {
        //If you add more buttons add more telemetry so we know whats going through
        //Debug purposes only
        telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-       telemetry.addData("Distance:", d);
-       telemetry.addData("Angle",angle);
+       telemetry.addData("velocity", velocity);
+       telemetry.addData("rpm", rpm);
        telemetry.addData("Area:", area);
+       telemetry.addData("park", parking);
        telemetry.update();
    }
 }

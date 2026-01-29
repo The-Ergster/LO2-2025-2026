@@ -100,15 +100,15 @@ public class WIPTeleOpLemon extends OpMode {
         //adds up input from controller (y, x, rx) divides by the biggest value between whatever the x, y and rx add up to or 1.
         double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         double flPower = (y + x + rx) / maxValue;
-        double blPower = (y - x + rx) / maxValue;
-        double frPower = (y - x - rx) / maxValue;
-        double brPower = (y + x - rx) / maxValue;
+        double blPower = (y - x + rx)  / maxValue;
+        double frPower = (y - x - rx)  / maxValue;
+        double brPower = (y + x - rx)/ maxValue;
 
         //Sets velocity on a scale from -MAX_TICKS_PER_SECOND to +MAX_TICKS_PER_SECOND
-        frontLeft.setVelocity(flPower * MAX_TICKS_PER_SECOND * scale);
-        backLeft.setVelocity(blPower * MAX_TICKS_PER_SECOND * scale);
-        frontRight.setVelocity(frPower * MAX_TICKS_PER_SECOND * scale);
-        backRight.setVelocity(brPower * MAX_TICKS_PER_SECOND * scale);
+        frontLeft.setVelocity((flPower * MAX_TICKS_PER_SECOND) * scale);
+        backLeft.setVelocity((blPower * MAX_TICKS_PER_SECOND) * scale);
+        frontRight.setVelocity((frPower * MAX_TICKS_PER_SECOND) * scale);
+        backRight.setVelocity((brPower * MAX_TICKS_PER_SECOND) * scale);
     }
 
     @Override
@@ -130,12 +130,12 @@ public class WIPTeleOpLemon extends OpMode {
 
         //actual code for movement
         //takes value from joysticks
-        double y = -gamepad.leftJoystick.getY(); // Forward/Backward
+        double y = gamepad.leftJoystick.getY(); // Forward/Backward
         double x = gamepad.leftJoystick.getX();  // Strafing
         double rx = gamepad.rightJoystick.getX(); // Rotation
-        double parking = gamepad.rightBumper.isPressed() ? 0.5 : 1.0; // parking?
+        double parking = gamepad.rightJoystickButton.isToggled() ? 0.5 : 1.0;
 
-        driveOmni(y,rx,x, parking);
+        driveOmni(y,rx,x,parking);
 
 
         if (gamepad.xButton.isPressed()) {
@@ -156,7 +156,7 @@ public class WIPTeleOpLemon extends OpMode {
 
         } else if (gamepad.yButton.isPressed()) {
             flywheelRIGHT.setPower(0.5);
-            flywheelLEFT.setPower(0.5);
+            flywheelLEFT.setPower(-0.5);
             loaderServo.setPower(-1);
         }
         else {
@@ -169,6 +169,7 @@ public class WIPTeleOpLemon extends OpMode {
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
+        telemetry.addData("park", parking);
         telemetry.update();
     }
 }
