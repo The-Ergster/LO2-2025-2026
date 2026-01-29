@@ -139,10 +139,10 @@ public class WIPTeleOpLemon extends OpMode {
 
 
         if (gamepad.xButton.isPressed()) {
-            flywheelRIGHT.setVelocity(3300);
-            flywheelLEFT.setVelocity(3300);
+            flywheelRIGHT.setVelocity(875);
+            flywheelLEFT.setVelocity(875);
             try {
-                Thread.sleep(1500);
+                Thread.sleep(1200);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
