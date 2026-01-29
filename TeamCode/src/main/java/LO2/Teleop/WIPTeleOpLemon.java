@@ -105,10 +105,10 @@ public class WIPTeleOpLemon extends OpMode {
         double brPower = (y + x - rx) / maxValue;
 
         //Sets velocity on a scale from -MAX_TICKS_PER_SECOND to +MAX_TICKS_PER_SECOND
-        frontLeft.setVelocity(flPower * MAX_TICKS_PER_SECOND);
-        backLeft.setVelocity(blPower * MAX_TICKS_PER_SECOND);
-        frontRight.setVelocity(frPower * MAX_TICKS_PER_SECOND);
-        backRight.setVelocity(brPower * MAX_TICKS_PER_SECOND);
+        frontLeft.setVelocity(flPower * MAX_TICKS_PER_SECOND * scale);
+        backLeft.setVelocity(blPower * MAX_TICKS_PER_SECOND * scale);
+        frontRight.setVelocity(frPower * MAX_TICKS_PER_SECOND * scale);
+        backRight.setVelocity(brPower * MAX_TICKS_PER_SECOND * scale);
     }
 
     @Override
@@ -130,15 +130,15 @@ public class WIPTeleOpLemon extends OpMode {
 
         //actual code for movement
         //takes value from joysticks
-        double y = -gamepad1.left_stick_y; // Forward/Backward
-        double x = gamepad1.left_stick_x;  // Strafing
-        double rx = gamepad1.right_stick_x; // Rotation
-        double parking = gamepad1.right_bumper ? 0.5 : 1.0; // parking?
+        double y = -gamepad.leftJoystick.getY(); // Forward/Backward
+        double x = gamepad.leftJoystick.getX();  // Strafing
+        double rx = gamepad.rightJoystick.getX(); // Rotation
+        double parking = gamepad.rightBumper.isPressed() ? 0.5 : 1.0; // parking?
 
         driveOmni(y,rx,x, parking);
 
 
-        if (gamepad1.x) {
+        if (gamepad.xButton.isPressed()) {
             flywheelRIGHT.setVelocity(3300);
             flywheelLEFT.setVelocity(3300);
             try {
@@ -148,13 +148,13 @@ public class WIPTeleOpLemon extends OpMode {
             }
             loaderServo.setPower(1);
 
-        } else if (gamepad1.a) {
+        } else if (gamepad.aButton.isPressed()) {
             loaderServo.setPower(1);
 
-        } else if (gamepad1.b) {
+        } else if (gamepad.bButton.isPressed()) {
             loaderServo.setPower(-1);
 
-        } else if (gamepad1.y) {
+        } else if (gamepad.yButton.isPressed()) {
             flywheelRIGHT.setPower(0.5);
             flywheelLEFT.setPower(0.5);
             loaderServo.setPower(-1);
