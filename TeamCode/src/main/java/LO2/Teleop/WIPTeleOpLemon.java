@@ -93,26 +93,29 @@ public class WIPTeleOpLemon extends OpMode {
 
     public void driveOmni(double y, double rx, double x, double scale) {
 
+        final double MAX_TICKS_PER_SECOND = 4661;
+
         frontLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-
+        //math stuff for movement
         //power is on scale of -1 to 1
         //adds up input from controller (y, x, rx) divides by the biggest value between whatever the x, y and rx add up to or 1.
         double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double flPower = (y + x + rx) / maxValue;
-        double blPower = (y - x + rx)  / maxValue;
-        double frPower = (y - x - rx)  / maxValue;
-        double brPower = (y + x - rx)/ maxValue;
+        double flPower = scale * (y + x + rx) / maxValue;
+        double blPower = scale * (y - x + rx) / maxValue;
+        double frPower = scale * (y - x - rx) / maxValue;
+        double brPower = scale * (y + x - rx) / maxValue;
 
         //Sets velocity on a scale from -MAX_TICKS_PER_SECOND to +MAX_TICKS_PER_SECOND
-        frontLeft.setPower(flPower  * scale);
-        frontRight.setPower(frPower  * scale);
-        backLeft.setPower(blPower  * scale);
-        backRight.setPower(brPower  * scale);
+        frontLeft.setPower(flPower);
+        backLeft.setPower(blPower);
+        frontRight.setPower(frPower);
+        backRight.setPower(brPower);
     }
+
 
     @Override
     public void start() {
@@ -131,24 +134,25 @@ public class WIPTeleOpLemon extends OpMode {
     public void loop() {
         gamepad.loop();
 
+
+//        double y = gamepad1.left_stick_y;
+//        double x = gamepad1.left_stick_x;
+//        double rx = gamepad1.right_stick_x;
+//        driveOmni(y,rx,x);
+
         //actual code for movement
         //takes value from joysticks
+        double parking = gamepad.rightJoystickButton.isToggled() ? 0.25 : 1.0;
         double y = gamepad.leftJoystick.getY(); // Forward/Backward
         double x = gamepad.leftJoystick.getX();  // Strafing
         double rx = gamepad.rightJoystick.getX(); // Rotation
-        double parking = gamepad.rightJoystickButton.isToggled() ? 0.5 : 1.0;
-
-        if(gamepad.rightJoystickButton.isToggled()) {
-            driveOmni(y,rx,x,parking);
-        } else {
-            driveOmni(y,rx,x);
-        }
+        driveOmni(y,rx,x, parking);
 
         if (gamepad.xButton.isPressed()) {
             flywheelRIGHT.setVelocity(875);
             flywheelLEFT.setVelocity(875);
             try {
-                Thread.sleep(1200);
+                Thread.sleep(1350);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -176,6 +180,7 @@ public class WIPTeleOpLemon extends OpMode {
         //Debug purposes only
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
         telemetry.addData("park", parking);
+        telemetry.addData("velocityY", y);
         telemetry.update();
     }
 }

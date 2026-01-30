@@ -41,9 +41,6 @@ public class WIPTeleOpLime extends OpMode {
 //        //defines encoders
        loaderServo = hardwareMap.get(CRServo.class, "ls");
 
-
-
-
        //configures direction
        frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
        backLeft.setDirection(DcMotorEx.Direction.REVERSE);
@@ -95,25 +92,27 @@ public class WIPTeleOpLime extends OpMode {
 
     public void driveOmni(double y, double rx, double x, double scale) {
 
+        final double MAX_TICKS_PER_SECOND = 4661;
+
         frontLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-
+        //math stuff for movement
         //power is on scale of -1 to 1
         //adds up input from controller (y, x, rx) divides by the biggest value between whatever the x, y and rx add up to or 1.
         double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double flPower = (y + x + rx) / maxValue;
-        double blPower = (y - x + rx)  / maxValue;
-        double frPower = (y - x - rx)  / maxValue;
-        double brPower = (y + x - rx)/ maxValue;
+        double flPower = scale * (y + x + rx) / maxValue;
+        double blPower = scale * (y - x + rx) / maxValue;
+        double frPower = scale * (y - x - rx) / maxValue;
+        double brPower = scale * (y + x - rx) / maxValue;
 
         //Sets velocity on a scale from -MAX_TICKS_PER_SECOND to +MAX_TICKS_PER_SECOND
-        frontLeft.setPower(flPower  * scale);
-        frontRight.setPower(frPower  * scale);
-        backLeft.setPower(blPower  * scale);
-        backRight.setPower(brPower  * scale);
+        frontLeft.setPower(flPower);
+        backLeft.setPower(blPower);
+        frontRight.setPower(frPower);
+        backRight.setPower(brPower);
     }
 
    @Override
@@ -140,28 +139,25 @@ public class WIPTeleOpLime extends OpMode {
        double distance = 2.43*Math.pow(area, 4) - 14.90409*Math.pow(area, 3) + 35.43912*Math.pow(area, 2) - 40.1374*area + 19.76406;
 
        //thanks will in meters/sec
-       double velocity = (9.8*Math.pow(distance, 2)) / (2 * 1.143 * Math.pow(Math.cos(80),2) - distance * Math.sin(20));
+       double velocityMetersPerSec = (9.8*Math.pow(distance, 2)) / (2 * 1.143 * Math.pow(Math.cos(80),2) - distance * Math.sin(20));
 
-       double rpm = (2*Math.PI * 0.048 / 60) / velocity;
+       double rpm = (2*Math.PI * 0.048 / 60) / velocityMetersPerSec;
+
+       double velocity = rpm * 28 / 60.0;
 
        //actual code for movement
        //takes value from joysticks
+       double parking = gamepad.rightJoystickButton.isToggled() ? 0.25 : 1.0;
        double y = gamepad.leftJoystick.getY(); // Forward/Backward
        double x = gamepad.leftJoystick.getX();  // Strafing
        double rx = gamepad.rightJoystick.getX(); // Rotation
-       double parking = gamepad.rightJoystickButton.isToggled() ? 0.5 : 1.0;
-
-       if(gamepad.rightJoystickButton.isToggled()) {
-           driveOmni(y,rx,x,parking);
-       } else {
-           driveOmni(y,rx,x);
-       }
+       driveOmni(y,rx,x, parking);
 
        if (gamepad.xButton.isPressed()) {
-           flywheelRIGHT.setVelocity(875);
-           flywheelLEFT.setVelocity(875);
+           flywheelRIGHT.setVelocity(velocity);
+           flywheelLEFT.setVelocity(velocity);
            try {
-               Thread.sleep(1200);
+               Thread.sleep(1350);
            } catch (InterruptedException e) {
                throw new RuntimeException(e);
            }
@@ -187,10 +183,11 @@ public class WIPTeleOpLime extends OpMode {
        // Telemetry for movement
        //If you add more buttons add more telemetry so we know whats going through
        //Debug purposes only
-       telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-       telemetry.addData("velocity", velocity);
-       telemetry.addData("rpm", rpm);
        telemetry.addData("Area:", area);
+       telemetry.addData("distance", distance);
+       telemetry.addData("velocity m/s", velocityMetersPerSec);
+       telemetry.addData("rpm", rpm);
+       telemetry.addData("velocity flywheel", velocity);
        telemetry.update();
    }
 }
