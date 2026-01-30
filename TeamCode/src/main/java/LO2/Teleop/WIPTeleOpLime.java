@@ -61,8 +61,7 @@ public class WIPTeleOpLime extends OpMode {
        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-       telemetry.addLine("Initiated Version 1.2");
-       telemetry.addLine("(^_^)");
+       telemetry.addLine("Initiated Version 2.3");
        telemetry.addLine("Brad says good luck!");
        telemetry.addLine(Constants.brad());
        telemetry.update();
@@ -92,8 +91,6 @@ public class WIPTeleOpLime extends OpMode {
 
     public void driveOmni(double y, double rx, double x, double scale) {
 
-        final double MAX_TICKS_PER_SECOND = 4661;
-
         frontLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
@@ -108,7 +105,7 @@ public class WIPTeleOpLime extends OpMode {
         double frPower = scale * (y - x - rx) / maxValue;
         double brPower = scale * (y + x - rx) / maxValue;
 
-        //Sets velocity on a scale from -MAX_TICKS_PER_SECOND to +MAX_TICKS_PER_SECOND
+        //Sets power
         frontLeft.setPower(flPower);
         backLeft.setPower(blPower);
         frontRight.setPower(frPower);
@@ -139,7 +136,7 @@ public class WIPTeleOpLime extends OpMode {
        double distance = 2.43*Math.pow(area, 4) - 14.90409*Math.pow(area, 3) + 35.43912*Math.pow(area, 2) - 40.1374*area + 19.76406;
 
        //thanks will in meters/sec
-       double velocityMetersPerSec = (9.8*Math.pow(distance, 2)) / (2 * 1.143 * Math.pow(Math.cos(80),2) - distance * Math.sin(20));
+       double velocityMetersPerSec = (9.8*Math.pow(distance, 2)) / (2 * 1.143 * Math.pow(Math.cos(Math.toRadians(80)),2) - distance * Math.sin(Math.toRadians(20)));
 
        double rpm = (2*Math.PI * 0.048 / 60) / velocityMetersPerSec;
 
@@ -183,6 +180,7 @@ public class WIPTeleOpLime extends OpMode {
        // Telemetry for movement
        //If you add more buttons add more telemetry so we know whats going through
        //Debug purposes only
+       telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
        telemetry.addData("Area:", area);
        telemetry.addData("distance", distance);
        telemetry.addData("velocity m/s", velocityMetersPerSec);

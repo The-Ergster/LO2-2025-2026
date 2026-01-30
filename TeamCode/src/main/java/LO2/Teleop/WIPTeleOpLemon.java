@@ -61,8 +61,7 @@ public class WIPTeleOpLemon extends OpMode {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        telemetry.addLine("Initiated Version 1.2");
-        telemetry.addLine("(^_^)");
+        telemetry.addLine("Initiated Version 2.3");
         telemetry.addLine("Brad says good luck!");
         telemetry.addLine(Constants.brad());
         telemetry.update();
@@ -134,12 +133,6 @@ public class WIPTeleOpLemon extends OpMode {
     public void loop() {
         gamepad.loop();
 
-
-//        double y = gamepad1.left_stick_y;
-//        double x = gamepad1.left_stick_x;
-//        double rx = gamepad1.right_stick_x;
-//        driveOmni(y,rx,x);
-
         //actual code for movement
         //takes value from joysticks
         double parking = gamepad.rightJoystickButton.isToggled() ? 0.25 : 1.0;
@@ -179,8 +172,6 @@ public class WIPTeleOpLemon extends OpMode {
         //If you add more buttons add more telemetry so we know whats going through
         //Debug purposes only
         telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
-        telemetry.addData("park", parking);
-        telemetry.addData("velocityY", y);
         telemetry.update();
     }
 }
