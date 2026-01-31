@@ -142,8 +142,8 @@ public class WIPTeleOpLemonSafe extends OpMode {
         driveOmni(y,rx,x, parking);
 
         if (gamepad.xButton.isPressed()) {
-            flywheelRIGHT.setVelocity(675);
-            flywheelLEFT.setVelocity(675);
+            flywheelRIGHT.setVelocity(750);
+            flywheelLEFT.setVelocity(750);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
