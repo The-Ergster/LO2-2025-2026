@@ -91,9 +91,6 @@ public class WIPTeleOpLemonSafe extends OpMode {
     }
 
     public void driveOmni(double y, double rx, double x, double scale) {
-
-        final double MAX_TICKS_PER_SECOND = 4661;
-
         frontLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
