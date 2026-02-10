@@ -40,19 +40,19 @@ public class Constants {
             "Oh my god I'm blooming", //requested, wasn't me
             "duct tape!",
             "Are you working on the limelight, Elliot?",
+            "Are you working on the limelight, Elliot?",
+            "Are you working on the limelight, Elliot?",
+            "Are you working on the limelight, Elliot?", //free extra probability
             "Estimated blast radius: 200 meters",
             "bug free since 2038",
             "Gradle: probably doing something",
             "And then, the fire nation attacked",
-            "Ba na nana na na nana, Ba na nana na na na 'tequila' ",
-            "010000110110111101101110011001110111001001100001011101000111001100100000011011110110111000100000011001100110100101101110011001000110100101101110011001110010000001100001011011100010000001100101011000010111001101110100011001010111001000100000011001010110011101100111",
-            "Gazuntite",
-            "Maggie shot Mr. Burns",
             "Now owned by Amazon Web Services",
-            "Do you know the muffin man?",
-            "Don't push code Shawn",
-            "Anish is short - Zack",
-            "Gunpowder gelatine, dynamite with a lazer beam."
+            "Gunpowder gelatin, dynamite with a lazer beam.",
+            "Thanks Will..",
+            "Probability that Alex is Parched: 23%",
+            "Probability that Alex is Parched: 57%",
+            "Probability that Alex is Parched: 92%"
     );
 
     public static String brad(){

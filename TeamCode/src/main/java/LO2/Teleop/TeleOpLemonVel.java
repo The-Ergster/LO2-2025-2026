@@ -14,7 +14,7 @@ import codebase.gamepad.Gamepad;
 import java.lang.Math;
 
 @TeleOp
-public class WIPTeleOpLemon extends OpMode {
+public class TeleOpLemonVel extends OpMode {
     //creates motor classes
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
     private DcMotorEx flywheelRIGHT, flywheelLEFT;

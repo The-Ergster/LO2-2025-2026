@@ -13,7 +13,7 @@ import codebase.Constants;
 import codebase.gamepad.Gamepad;
 
 @TeleOp
-public class WIPTeleOpLime extends OpMode {
+public class TeleOpLimeBlu extends OpMode {
    //creates motor classes
    private DcMotorEx frontLeft, frontRight, backLeft, backRight;
    private DcMotorEx flywheelRIGHT, flywheelLEFT;
@@ -131,15 +131,26 @@ public class WIPTeleOpLime extends OpMode {
        gamepad.loop();
 
        LLResult result = limelight.getLatestResult();
-       double area = result.getTa();
-       //regression
-       double distance = 2.43*Math.pow(area, 4) - 14.90409*Math.pow(area, 3) + 35.43912*Math.pow(area, 2) - 40.1374*area + 19.76406;
+       double area = result.getTa() * 100;
 
-       //thanks will in meters/sec
-       double velocityMetersPerSec = (9.8*Math.pow(distance, 2)) / (2 * 1.143 * Math.pow(Math.cos(Math.toRadians(80)),2) - distance * Math.sin(Math.toRadians(20)));
+       //1. regression equation, output should range from 0.60m to 1.75m
+       double dist = 0.00494514 * Math.pow(area, 4)
+                    -0.0820333 * Math.pow(area, 3)
+                    +0.518801 * Math.pow(area, 2)
+                    -1.61049 * Math.pow(area, 1)
+                    +2.88921 * Math.pow(area, 0);
 
-       double rpm = (2*Math.PI * 0.048 / 60) / velocityMetersPerSec;
+       //2. velocity = sqrt((gravity * distance squared) / (2 cos(angle) squared ( distance * tan(angle - height)))
+       final double g = 9.8067;
+       final double h = 1.143 - 0.3048;
+       double velocityMPS = Math.sqrt(
+                       (g * Math.pow(dist, 2)) / ((2 * Math.pow(Math.cos(Math.toRadians(80)), 2)) * (dist * Math.tan(Math.toRadians(80)) - h)));
 
+       //3. rpm = (velocity * 60) / (2pi * radius)
+       final double fwRadius = 48.0/1000;
+       double rpm = (velocityMPS * 60) / (2 * Math.PI * fwRadius);
+
+       //4. flywheel velocity = rpm * motorTicksPerSec / 1 second [i think]
        double velocity = rpm * 28 / 60.0;
 
        //actual code for movement
@@ -182,8 +193,8 @@ public class WIPTeleOpLime extends OpMode {
        //Debug purposes only
        telemetry.addData("Gamepad 1:", "Left Y: %.2f | Left X: %.2f | Right X: %.2f", y, x, rx);
        telemetry.addData("Area:", area);
-       telemetry.addData("distance", distance);
-       telemetry.addData("velocity m/s", velocityMetersPerSec);
+       telemetry.addData("distance", dist);
+       telemetry.addData("velocity m/s", velocityMPS);
        telemetry.addData("rpm", rpm);
        telemetry.addData("velocity flywheel", velocity);
        telemetry.update();
