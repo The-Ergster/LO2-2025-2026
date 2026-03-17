@@ -26,13 +26,17 @@ public void init() {
   backLeft.setDirection(DcMotorEx.Direction.REVERSE);
   frontRight.setDirection(DcMotorEx.Direction.FORWARD);
   frontRight.setDirection(DcMotorEx.Direction.FORWARD);
-  wheelLeft.setDirection.(DcMotor.Direction.FORDWARD);
+  wheelLeft.setDirection.(DcMotor.Direction.FORWARD);
   wheelRight.setDirection.(DcMotor.Direction.REVERSE);
 }
 
 public void driveOmni(double x, double y, double rx) {
   final double MTPS = 4661;
   double maxValue = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(rx), 1);
+  double flPower = (y + x + rx) / maxValue;
+  double blPower = (y - x + rx) / maxValue;
+  double frPower = (y - x - rx) / maxValue;
+  double brPower = (y + x - rx) / maxValue;
 }
 
 @Override
