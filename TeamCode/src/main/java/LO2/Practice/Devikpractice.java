@@ -44,9 +44,9 @@ public class code extends OpMode{
   }
 @Override
   public void loop(){
+    double x = gamepad1.left_stick_x;
     double y = gamepad1.left_stick_y;
-    double y = gamepad1.left_stick_x;
-    double y = gamepad1.right_stick_x;
+    double rx = gamepad1.right_stick_x;
     driveOmni(x, y, rx);
     if(gamepad1.x){
       flywheelRight.setPower(1);
@@ -56,9 +56,12 @@ public class code extends OpMode{
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
       } else if {
-        // Wawa
+        loaderServo.setPower(0);
+        loaderServo.setPower(1);
       } else {
-        // Wawa
+        flywheelRight.setPower(1);
+        flywheelLeft.setPower(1);
+        loaderServo.setPower(0);
       }
     }
   }
