@@ -37,9 +37,15 @@ public void driveOmni(double x, double y, double rx) {
   double blPower = (y - x + rx) / maxValue;
   double frPower = (y - x - rx) / maxValue;
   double brPower = (y + x - rx) / maxValue;
+
+  frontLeft.setVelocity(flPower * MTPS);
+  frontRight.setVelocity(flPower * MTPS);
+  backLeft.setVelocity(flPower * MTPS);
+  backRight.setVelocity(flPower * MTPS);
 }
 
 @Override
-public void loop() {
+public void loop() 
+{
   
 }
