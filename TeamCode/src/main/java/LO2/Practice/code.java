@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 //Servo Import
 import com.qualcomm.robotcore.hardware.CRServo;
 
+import java.lang.Math;
 
 @TeleOp
 public class code extends OpMode{
@@ -30,12 +31,56 @@ public class code extends OpMode{
     backLeft.setDirection(DcMotorEx.Direction.REVERSE);
     frontRight.setDirection(DcMotorEx.Direction.FORWARD);
     backRight.setDirection(DcMotorEx.Direction.FORWARD);
-    flywheelLEFT.setDirection(DcMotorEx.Direction.FORWARD);
-    flywheelRIGHT.setDirection(DcMotorEx.Direction.REVERSE);
+    flywheelLeft.setDirection(DcMotorEx.Direction.FORWARD);
+    flywheelRight.setDirection(DcMotorEx.Direction.REVERSE);
   }
-@Override
+public void driveOmni(double y, double x, double rx){
+
+  final double MTPS = 4661;
+
+  double maxValue = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+  double flPower = (y + x + rx) / maxValue;
+  double blPower = (y - x + rx) / maxValue;
+  double frPower = (y - x - rx) / maxValue;
+  double brPower = (y + x - rx) / maxValue;
+
+  frontLeft.setVelocity(flPower * MTPS);
+  frontRight.setVelocity(frPower * MTPS);
+  backLeft.setVelocity(blPower * MTPS);
+  backRight.setVelocity(brPower * MTPS);
+}
+  
+  @Override
   public void loop(){
-    
+
+    double y = gamepad1.left_stick_y;
+    double x = gamepad1.left_stick_x;
+    double rx = gamepad1.right_stick_x;
+    driveOmni(y, x, rx);
+
+    if (gamepad1.x){
+      flywheelRight.setPower(1);
+      flywheelLeft.setPower(1);
+      try{
+        Thread.sleep(1500);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+      loaderServo.setPower(1);
+    } else if (gamepad1.x){
+      //Wiggles servo arm
+      loaderServo.setPower(-1)
+      try{
+        Thread.sleep(500);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+      loaderServo.setPower(1)
+    } else{
+      flywheelRight.setPower(0);
+      flywheelLeft.setPower(0);
+      loaderServo.setPower(0);
+    }
   }
   
 }
