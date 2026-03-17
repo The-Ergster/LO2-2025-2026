@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
 
+import java.lang.Math;
+
 @Teleop
 public class rileyiscool extends OpMode{
   private DcMotorEx frontLeft, frontRight, backLeft, backRight;
@@ -29,7 +31,8 @@ public void init() {
 }
 
 public void driveOmni(double x, double y, double rx) {
-  
+  final double MTPS = 4661;
+  double maxValue = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(rx), 1);
 }
 
 @Override
