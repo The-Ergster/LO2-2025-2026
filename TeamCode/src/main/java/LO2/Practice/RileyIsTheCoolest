@@ -1,0 +1,38 @@
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.CRServo;
+
+@Teleop
+public class rileyiscool extends OpMode{
+  private DcMotorEx frontLeft, frontRight, backLeft, backRight;
+  private DcMotorEx flywheelRight, flywheelLeft;
+  private CRServo leaderServo;
+}
+
+@Override
+public void init() {
+  frontLeft = hardwareMap.get(DcMotorEx.class, "fl")
+  frontRight = hardwareMap.get(DcMotorEx.class, "fr")
+  backLeft = hardwareMap.get(DcMotorEx.class, "bl")
+  backRight = hardwareMap.get(DcMotorEx.class, "br")
+  wheelLeft = hardwareMap.get(DcMotorEx.class, "wl")
+  wheelRight = hardwareMap.get(DcMotorEx.class, "wr")
+
+  frontLeft.setDirection(DcMotorEx.Direction.REVERSE);
+  backLeft.setDirection(DcMotorEx.Direction.REVERSE);
+  frontRight.setDirection(DcMotorEx.Direction.FORWARD);
+  frontRight.setDirection(DcMotorEx.Direction.FORWARD);
+  wheelLeft.setDirection.(DcMotor.Direction.FORDWARD);
+  wheelRight.setDirection.(DcMotor.Direction.REVERSE);
+}
+
+public void driveOmni(double x, double y, double rx) {
+  
+}
+
+@Override
+public void loop() {
+  
+}
